@@ -1,17 +1,17 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
 import ProtectedRoute from "./routes/ProtectedRoute";
 import PublicRoute from "./routes/PublicRoute";
 import Navbar from "./components/Navbar/Navbar";
+import UserLogin from "./screens/UserLogin/UserLogin";
 
 const App = () => {
   return (
     <BrowserRouter>
-    <Navbar />
+    {/* <Navbar /> */}
       <Routes>
 
         <Route element={<PublicRoute />}>
-          {/* <Route path="/login" element={<Login />} /> */}
+          <Route path="/login" element={<UserLogin />} />
           {/* <Route path="/signup" element={<Signup />} /> */}
         </Route>
 

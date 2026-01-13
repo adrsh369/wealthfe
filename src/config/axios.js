@@ -1,6 +1,7 @@
-import axios from "axios"
-import { ENV } from "./env"
-import { getAuthToken } from "../utils/auth"
+import axios from "axios";
+import { ENV } from "./env";
+import { store } from "../store";
+
 
 const axiosInstance = axios.create({
   baseURL: ENV.REGISTRATION_MS,
@@ -8,25 +9,36 @@ const axiosInstance = axios.create({
   headers: {
     "Content-Type": "application/json"
   }
-})
+});
+
 
 axiosInstance.interceptors.request.use(
   config => {
-    const token = getAuthToken()
+
+    const state = store.getState();
+    const token = state.auth?.authToken;
+
     if (token) {
-      config.headers.authorization = `Bearer ${token}`
+      config.headers.authorization = `Bearer ${token}`;
     }
-    return config
+
+    return config;
   },
   error => Promise.reject(error)
-)
+);
+
 
 axiosInstance.interceptors.response.use(
   response => response.data,
   error => {
-    console.error("API Error:", error)
-    return Promise.reject(error)
-  }
-)
 
-export default axiosInstance
+    if (error.response && error.response.status === 401) {
+      store.dispatch({ type: "auth/logout" });
+    }
+
+    console.error("API Error:", error);
+    return Promise.reject(error);
+  }
+);
+
+export default axiosInstance;
