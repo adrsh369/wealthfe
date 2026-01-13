@@ -2,10 +2,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
 import PublicRoute from "./routes/PublicRoute";
+import Navbar from "./components/Navbar/Navbar";
 
 const App = () => {
   return (
     <BrowserRouter>
+    <Navbar />
       <Routes>
 
         <Route element={<PublicRoute />}>
