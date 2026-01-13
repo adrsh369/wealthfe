@@ -168,9 +168,9 @@ const UserLogin = () => {
                 {step === 'register' && 'Create Account'}
               </h2>
               <p className={styles.userLoginFormDescription}>
-                {step === 'email' && 'Lorem ipsum dolor sit amet consectetur.'}
-                {step === 'login' && 'Lorem ipsum dolor sit amet consectetur.'}
-                {step === 'register' && 'Lorem ipsum dolor sit amet consectetur.'}
+                {step === 'email' && 'Build wealth by investing in Digital Gold.'}
+                {step === 'login' && 'Login to app and view your assets.'}
+                {step === 'register' && 'Register with us to build your Portfolio.'}
               </p>
             </div>
 
