@@ -21,7 +21,7 @@ const Dashboard = () => {
 
 
     const products = [
-        { name: 'Digital Gold', icon: '📀', status: 'active', color: '#FFD700' },
+        { name: 'Digital Gold', icon: '📀', status: 'active', color: '#FFD700', link: '/digitalGold' },
         { name: 'NPS', icon: '🏛️', status: 'active', color: '#1565C0' },
         { name: 'Mutual Funds', icon: '📈', status: 'coming', color: '#4CAF50' },
         { name: 'Stocks', icon: '📊', status: 'coming', color: '#9C27B0' },
@@ -86,7 +86,7 @@ const Dashboard = () => {
                         </div>
                         <div className={styles.DashboardProductGrid}>
                             {products.map((item, idx) => (
-                                <div key={idx} className={`${styles.DashboardProductItem} ${item.status === 'coming' ? styles.DashboardProductSoon : ''}`}>
+                                <div key={idx} className={`${styles.DashboardProductItem} ${item.status === 'coming' ? styles.DashboardProductSoon : ''}`} onClick={() => navigate(item.link)}>
                                     {item.status === 'coming' && <span className={styles.DashboardMiniBadge}>Soon</span>}
                                     <div className={styles.DashboardIconBox} style={{ backgroundColor: `${item.color}15` }}>
                                         <span>{item.icon}</span>
@@ -105,7 +105,7 @@ const Dashboard = () => {
                             <h4 className={styles.DashboardSectionTitle}>Asset Distribution</h4>
                         </div>
                         <div className={styles.DashboardDistributionCard}>
-                            <div className={styles.DashboardDistRow} onClick={() => navigate("/digitalGold")}>
+                            <div className={styles.DashboardDistRow}>
                                 <span className={styles.DashboardDistDot} style={{ background: '#FFD700' }}></span>
                                 <p>Digital Gold</p>
                                 <span className={styles.DashboardDistPercent}>70%</span>

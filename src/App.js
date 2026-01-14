@@ -15,7 +15,7 @@ const App = () => {
         <Route element={<PublicRoute />}>
           <Route path="/login" element={<UserLogin />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/digtalGold" element={<DigitalGold />} />
+          <Route path="/digitalGold" element={<DigitalGold />} />
         </Route>
 
         <Route element={<ProtectedRoute />}>

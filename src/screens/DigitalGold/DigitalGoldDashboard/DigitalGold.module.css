@@ -1,9 +1,12 @@
 .DigitalGoldDashboardContainer {
-  font-family: 'Inter', -apple-system, sans-serif;
-  background-color: #f8faff;
+  font-family: 'Inter', system-ui, sans-serif;
+  /* background-color: #f9fbff; */
+  background-color: #fff;
   min-height: 100vh;
   padding: 16px;
-  color: #1a202c;
+  max-width: 1300px;
+  margin: 0 auto;
+  color: #092042;
 }
 
 /* --- Header Section --- */
