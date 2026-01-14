@@ -156,6 +156,12 @@
     gap: 12px;
 }
 
+@media (min-width: 769px) {
+    .DashboardProductGrid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
 .DashboardProductItem {
     background: white;
     padding: 16px;
