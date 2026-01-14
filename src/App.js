@@ -3,16 +3,19 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import PublicRoute from "./routes/PublicRoute";
 import Navbar from "./components/Navbar/Navbar";
 import UserLogin from "./screens/UserLogin/UserLogin";
+import DigitalGold from "./screens/DigitalGold/DigitalGoldRoutes";
+import Dashboard from "./screens/Dashboard/Dashboard";
 
 const App = () => {
   return (
     <BrowserRouter>
-    {/* <Navbar /> */}
+      {/* <Navbar /> */}
       <Routes>
 
         <Route element={<PublicRoute />}>
           <Route path="/login" element={<UserLogin />} />
-          {/* <Route path="/signup" element={<Signup />} /> */}
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/digtalGold" element={<DigitalGold />} />
         </Route>
 
         <Route element={<ProtectedRoute />}>
