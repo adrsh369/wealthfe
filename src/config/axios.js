@@ -4,7 +4,7 @@ import { store } from "../store";
 
 
 const axiosInstance = axios.create({
-  baseURL: ENV.REGISTRATION_MS,
+  baseURL: ENV.API_BASE_URL,
   timeout: 30000,
   headers: {
     "Content-Type": "application/json"

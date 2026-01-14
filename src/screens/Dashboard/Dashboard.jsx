@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
     MoveLeft,
     TrendingUp,
@@ -14,10 +14,22 @@ import {
 import styles from './Dashboard.module.css';
 import Navbar from '../../components/Navbar/Navbar';
 import { useNavigate } from 'react-router-dom';
+import { setAuthFromLogin } from '../../store/auth/auth.slice';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchUserProfile } from '../../store/auth/auth.thunks';
+import { selectProfileLoaded, selectUserName } from "../../store/auth/auth.selectors";
 
 const Dashboard = () => {
-
+    const dispatch = useDispatch();
     const navigate = useNavigate();
+    const profileLoaded = useSelector(selectProfileLoaded);
+    const userName = useSelector(selectUserName)
+
+    useEffect(() => {
+        if (!profileLoaded) {
+            dispatch(fetchUserProfile());
+        }
+    }, [profileLoaded, dispatch]);
 
 
     const products = [
@@ -35,7 +47,7 @@ const Dashboard = () => {
                 <header className={styles.DashboardHeader}>
                     <div className={styles.DashboardHeaderLeft}>
                         {/* <MoveLeft size={18} /> */}
-                        <h1 className={styles.DashboardPageTitle}>Hi Adarsh</h1>
+                        <h1 className={styles.DashboardPageTitle}>Hi {userName}</h1>
                     </div>
                     <div className={styles.DashboardSupportIcon}>
                         <Info size={16} color="#64748b" />

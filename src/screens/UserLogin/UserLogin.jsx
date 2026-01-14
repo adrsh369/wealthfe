@@ -3,8 +3,12 @@ import toast from 'react-hot-toast';
 import styles from './UserLogin.module.css';
 import { fetchUserExists, userLogin, userRegister } from '../../services/apis/login.service';
 import loginDesk from "../../assets/images/login/loginDesk.png"
+import { setAuthFromLogin } from '../../store/auth/auth.slice';
+import { useDispatch } from 'react-redux';
+import { fetchUserProfile } from '../../store/auth/auth.thunks';
 
 const UserLogin = () => {
+  const dispatch = useDispatch();
   const navigateToDashboard = () => {
     window.location.href = '/dashboard';
   };
@@ -50,13 +54,17 @@ const UserLogin = () => {
     setLoading(true);
     try {
       const response = await fetchUserExists({ emailId: email });
-      
-      if (response?.data?.status === 1 && response?.data?.userExists) {
+
+      console.log("email exits:", response.status)
+
+      if (response?.status === 1) {
         setStep('login');
         toast.success('User found! Please enter your password');
-      } else {
+      } else if (response?.status === 0) {
         setStep('register');
         toast.success('Create your account');
+      } else {
+        toast.error("Please try again later")
       }
     } catch (error) {
       toast.error(error?.response?.data?.message || 'Error checking user');
@@ -79,17 +87,23 @@ const UserLogin = () => {
     setLoading(true);
     try {
       const response = await userLogin({ email, password });
-      
-      if (response?.data?.status === 1) {
+
+      if (response?.status === 1) {
         toast.success('Login successful!');
+        dispatch(
+          setAuthFromLogin({
+            authToken: response.token,
+          })
+        );
+
         setTimeout(() => {
           navigateToDashboard();
         }, 500);
       } else {
-        toast.error(response?.data?.message || 'Invalid credentials');
+        toast.error(response?.message || 'Invalid credentials');
       }
     } catch (error) {
-      toast.error(error?.response?.data?.message || 'Login failed');
+      toast.error(error?.response?.message || 'Login failed');
     } finally {
       setLoading(false);
     }
@@ -123,17 +137,15 @@ const UserLogin = () => {
     setLoading(true);
     try {
       const response = await userRegister({ name, mobileNo, email, password });
-      
-      if (response?.data?.status === 1) {
+
+      if (response?.status === 1) {
         toast.success('Registration successful!');
-        setTimeout(() => {
-          navigateToDashboard();
-        }, 500);
+        setStep('login');
       } else {
-        toast.error(response?.data?.message || 'Registration failed');
+        toast.error(response?.message || 'Registration failed');
       }
     } catch (error) {
-      toast.error(error?.response?.data?.message || 'Registration failed');
+      toast.error(error?.response?.message || 'Registration failed');
     } finally {
       setLoading(false);
     }
@@ -152,10 +164,10 @@ const UserLogin = () => {
       <div className={styles.userLoginWrapper}>
         <div className={styles.userLoginCard}>
           <div className={styles.userLoginLeftSection}>
-            <img 
-              src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&auto=format&fit=crop" 
+            <img
+              src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&auto=format&fit=crop"
               // src={loginDesk}
-              alt="Login" 
+              alt="Login"
               className={styles.userLoginLeftImage}
             />
           </div>
@@ -190,7 +202,7 @@ const UserLogin = () => {
                   />
                   {errors.email && <span className={styles.userLoginErrorText}>{errors.email}</span>}
                 </div>
-                <button 
+                <button
                   type="button"
                   onClick={handleEmailSubmit}
                   className={styles.userLoginButton}
@@ -231,14 +243,14 @@ const UserLogin = () => {
                   </div>
                 </div>
                 <div className={styles.userLoginButtonRow}>
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     onClick={handleBackToEmail}
                     className={styles.userLoginBackButton}
                   >
                     Back
                   </button>
-                  <button 
+                  <button
                     type="button"
                     onClick={handleLogin}
                     className={styles.userLoginButton}
@@ -300,14 +312,14 @@ const UserLogin = () => {
                   {errors.password && <span className={styles.userLoginErrorText}>{errors.password}</span>}
                 </div>
                 <div className={styles.userLoginButtonRow}>
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     onClick={handleBackToEmail}
                     className={styles.userLoginBackButton}
                   >
                     Back
                   </button>
-                  <button 
+                  <button
                     type="button"
                     onClick={handleRegister}
                     className={styles.userLoginButton}

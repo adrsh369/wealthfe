@@ -11,3 +11,10 @@ export const selectUserId = state =>
 
 export const selectCustomerId = state =>
   state.auth.customerId;
+
+export const selectProfileLoaded = state =>
+  state.auth.profileLoaded;
+
+export const selectUserName = state => state.auth.name;
+export const selectUserEmail = state => state.auth.email;
+

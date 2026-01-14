@@ -63,26 +63,17 @@ const Navbar = ({ hideIcons, noRedirect }) => {
                             </NavLink>
 
                             <NavLink
-                                to="/home"
+                                to="/digitalGold"
                                 className={({ isActive }) =>
                                     isActive
                                         ? `${styles.NavbarNavItem} ${styles.NavbarNavItemActive}`
                                         : styles.NavbarNavItem
                                 }
                             >
-                                Home
+                                Digital Gold
                             </NavLink>
 
-                            <NavLink
-                                to="/products"
-                                className={({ isActive }) =>
-                                    isActive
-                                        ? `${styles.NavbarNavItem} ${styles.NavbarNavItemActive}`
-                                        : styles.NavbarNavItem
-                                }
-                            >
-                                Products
-                            </NavLink>
+            
                         </nav>
                     )}
                 </div>

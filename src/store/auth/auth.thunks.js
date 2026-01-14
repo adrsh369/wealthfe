@@ -1,14 +1,24 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { postRequest } from "../../services/apiClient";
+import { getRequest } from "../../services/apiClient";
 import { setAuthFromLogin } from "./auth.slice";
 
-export const fetchLoginData = createAsyncThunk(
-  "auth/fetchLoginData",
-  async (payload, { dispatch }) => {
-    const response = await postRequest("/loginData", payload);
+export const fetchUserProfile = createAsyncThunk(
+  "auth/fetchUserProfile",
+  async (_, { dispatch, getState }) => {
+    const response = await getRequest("/api/users/getprofile");
 
-    if (response?.statusCode === 1) {
-      dispatch(setAuthFromLogin(response.data));
+    if (response?.userId) {
+      const existingToken = getState().auth.authToken;
+
+      dispatch(
+        setAuthFromLogin({
+          authToken: existingToken,
+          userId: response.userId,
+          mobileNo: response.mobileNo,
+          name: response.name,
+          email: response.email
+        })
+      );
     }
 
     return response;

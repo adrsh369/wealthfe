@@ -2,8 +2,10 @@ import React from 'react';
 import { MoveLeft, Calendar, Coins, Play, CircleStar, ChevronRight, CheckCircle2, Clock } from 'lucide-react';
 import styles from './DigitalGold.module.css';
 import Navbar from '../../../components/Navbar/Navbar';
+import { useNavigate } from 'react-router-dom';
 
 const DigitalGold = () => {
+  const navigate = useNavigate();
   const orders = [
     { type: 'Bought', rate: '7500/gm', tag: 'SIP', date: '10/01/2024', amount: '₹ 1,36,720', weight: '20 gm gold', status: 'success' },
     { type: 'Sold', rate: '7456/gm', tag: '', date: '10/01/2024', amount: '₹ 1,709', weight: '0.250 gm gold', status: 'pending' },
@@ -17,7 +19,7 @@ const DigitalGold = () => {
       <div className={styles.DigitalGoldDashboardContainer}>
         {/* Header */}
         <header className={styles.DigitalGoldDashboardHeader}>
-          <div className={styles.DigitalGoldDashboardTitleGroup}>
+          <div className={styles.DigitalGoldDashboardTitleGroup} onClick={() => navigate("/dashboard")}>
             <MoveLeft size={18} className={styles.DigitalGoldDashboardBackIcon} />
             <h2 className={styles.DigitalGoldDashboardMainTitle}>Digital gold</h2>
           </div>

@@ -13,10 +13,10 @@ const initialState = {
   roles: [],
   permissions: [],
 
-  profile: {
-    name: "",
-    email: ""
-  }
+  name: "",
+  email: "",
+
+  profileLoaded: false
 };
 
 const authSlice = createSlice({
@@ -27,18 +27,32 @@ const authSlice = createSlice({
       const data = action.payload;
 
       state.isAuthenticated = true;
-      state.authToken = data.authToken;
-      state.userId = data.userId;
-      state.customerId = data.customerId;
 
-      state.mobileNo = data.mobileNo;
-      state.isMobile = data.isMobile;
+      if (data.authToken) {
+        state.authToken = data.authToken;
+      }
 
-      state.roles = data.roles || [];
-      state.permissions = data.permissions || [];
+      if (data.userId) {
+        state.userId = data.userId;
+      }
 
-      state.profile.name = data.name || "";
-      state.profile.email = data.email || "";
+      if (data.customerId) {
+        state.customerId = data.customerId;
+      }
+
+      if (data.mobileNo) {
+        state.mobileNo = data.mobileNo;
+      }
+
+      state.isMobile = data.isMobile ?? state.isMobile;
+
+      state.roles = data.roles || state.roles;
+      state.permissions = data.permissions || state.permissions;
+
+      state.name = data.name || state.name;
+      state.email = data.email || state.email;
+
+      state.profileLoaded = true;
     },
 
     logout: () => initialState
