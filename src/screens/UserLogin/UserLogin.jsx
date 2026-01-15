@@ -2,7 +2,7 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 import styles from './UserLogin.module.css';
 import { fetchUserExists, userLogin, userRegister } from '../../services/apis/login.service';
-import loginDesk from "../../assets/images/login/loginDesk.png"
+import loginDesk from "../../assets/images/login/d.jpg"
 import { setAuthFromLogin } from '../../store/auth/auth.slice';
 import { useDispatch } from 'react-redux';
 import { fetchUserProfile } from '../../store/auth/auth.thunks';
@@ -165,8 +165,8 @@ const UserLogin = () => {
         <div className={styles.userLoginCard}>
           <div className={styles.userLoginLeftSection}>
             <img
-              src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&auto=format&fit=crop"
-              // src={loginDesk}
+              // src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&auto=format&fit=crop"
+              src={loginDesk}
               alt="Login"
               className={styles.userLoginLeftImage}
             />
