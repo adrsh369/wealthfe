@@ -5,7 +5,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { logout } from "../../store/auth/auth.slice";
 import { selectIsAuthenticated } from "../../store/auth/auth.selectors";
 import styles from "./Navbar.module.css";
-import wealthLogo from "../../assets/images/logos/wealthLogo.svg"
+import wealthLogo from "../../assets/images/logos/logo.png"
 
 const Navbar = ({ hideIcons, noRedirect }) => {
     const dispatch = useDispatch();

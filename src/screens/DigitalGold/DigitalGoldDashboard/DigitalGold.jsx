@@ -1,11 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { MoveLeft, Calendar, Coins, Play, CircleStar, ChevronRight, CheckCircle2, Clock } from 'lucide-react';
 import styles from './DigitalGold.module.css';
 import Navbar from '../../../components/Navbar/Navbar';
 import { useNavigate } from 'react-router-dom';
+import BuyGold from '../BuyGold/BuyGold';
+import BuyGoldStatusModal from '../BuyGold/BuyGoldStatusModal';
+import backIcon from '../../../assets/images/backIcon.svg';
 
 const DigitalGold = () => {
   const navigate = useNavigate();
+  const [showBuyGoldModal, setBuyGoldModal] = useState(false);
+  const [statusModal, setStatusModal] = useState({
+    open: false,
+    type: '',
+    details: {}
+  });
+
   const orders = [
     { type: 'Bought', rate: '7500/gm', tag: 'SIP', date: '10/01/2024', amount: '₹ 1,36,720', weight: '20 gm gold', status: 'success' },
     { type: 'Sold', rate: '7456/gm', tag: '', date: '10/01/2024', amount: '₹ 1,709', weight: '0.250 gm gold', status: 'pending' },
@@ -20,7 +30,7 @@ const DigitalGold = () => {
         {/* Header */}
         <header className={styles.DigitalGoldDashboardHeader}>
           <div className={styles.DigitalGoldDashboardTitleGroup} onClick={() => navigate("/dashboard")}>
-            <MoveLeft size={18} className={styles.DigitalGoldDashboardBackIcon} />
+            <img src={backIcon} alt="back" className={styles.DigitalGoldDashboardBackIcon}/>
             <h2 className={styles.DigitalGoldDashboardMainTitle}>Digital gold</h2>
           </div>
           <div className={styles.DigitalGoldDashboardLivePriceBadge}>
@@ -54,7 +64,7 @@ const DigitalGold = () => {
                 </a>
                 <div className={styles.DigitalGoldDashboardSavingsActions}>
                   <button className={styles.DigitalGoldDashboardBtnWithdraw}>Withdraw</button>
-                  <button className={styles.DigitalGoldDashboardBtnBuy}>Buy More</button>
+                  <button className={styles.DigitalGoldDashboardBtnBuy} onClick={() => setBuyGoldModal(true)}>Buy More</button>
                 </div>
               </div>
             </section>
@@ -144,6 +154,29 @@ const DigitalGold = () => {
           </aside>
         </main>
       </div>
+
+
+      <BuyGold
+        isOpen={showBuyGoldModal}
+        onClose={() => {
+          setBuyGoldModal(false);
+        }}
+        // onConfirm={handleOtpConfirm}
+        // onResend={sendOTPConcent}
+        // autoRead={true}
+        // externalError={otpError}
+        title="Buy Gold"
+        setStatusModal={setStatusModal}
+      />
+
+      <BuyGoldStatusModal
+        isOpen={statusModal.open}
+        status={statusModal.type}
+        details={statusModal.details}
+        onClose={() =>
+          setStatusModal({ ...statusModal, open: false })
+        }
+      />
 
     </>
   );

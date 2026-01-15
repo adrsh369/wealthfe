@@ -88,7 +88,7 @@ const Dashboard = () => {
                                 </div>
                                 <h3 className={styles.DashboardPromoTitle}>Build your gold nest egg</h3>
                                 <p className={styles.DashboardPromoText}>Start saving in 24K Pure Gold from just ₹10.</p>
-                                <button className={styles.DashboardPromoAction}>Get Started</button>
+                                <button className={styles.DashboardPromoAction} onClick={() => navigate("/digitalGold")}>Get Started</button>
                             </div>
                             <div className={styles.DashboardPromoIcon}>📀</div>
                         </div>
