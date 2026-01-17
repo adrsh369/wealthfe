@@ -6,10 +6,12 @@ import { useNavigate } from 'react-router-dom';
 import BuyGold from '../BuyGold/BuyGold';
 import BuyGoldStatusModal from '../BuyGold/BuyGoldStatusModal';
 import backIcon from '../../../assets/images/backIcon.svg';
+import SellGold from '../SellGold/SellGold';
 
 const DigitalGold = () => {
   const navigate = useNavigate();
   const [showBuyGoldModal, setBuyGoldModal] = useState(false);
+  const [showSellGoldModal, setSellGoldModal] = useState(false);
   const [statusModal, setStatusModal] = useState({
     open: false,
     type: '',
@@ -30,7 +32,7 @@ const DigitalGold = () => {
         {/* Header */}
         <header className={styles.DigitalGoldDashboardHeader}>
           <div className={styles.DigitalGoldDashboardTitleGroup} onClick={() => navigate("/dashboard")}>
-            <img src={backIcon} alt="back" className={styles.DigitalGoldDashboardBackIcon}/>
+            <img src={backIcon} alt="back" className={styles.DigitalGoldDashboardBackIcon} />
             <h2 className={styles.DigitalGoldDashboardMainTitle}>Digital gold</h2>
           </div>
           <div className={styles.DigitalGoldDashboardLivePriceBadge}>
@@ -63,7 +65,7 @@ const DigitalGold = () => {
                   View Detail <ChevronRight size={14} />
                 </a>
                 <div className={styles.DigitalGoldDashboardSavingsActions}>
-                  <button className={styles.DigitalGoldDashboardBtnWithdraw}>Withdraw</button>
+                  <button className={styles.DigitalGoldDashboardBtnWithdraw} onClick={() => setSellGoldModal(true)}>Withdraw</button>
                   <button className={styles.DigitalGoldDashboardBtnBuy} onClick={() => setBuyGoldModal(true)}>Buy More</button>
                 </div>
               </div>
@@ -166,6 +168,15 @@ const DigitalGold = () => {
         // autoRead={true}
         // externalError={otpError}
         title="Buy Gold"
+        setStatusModal={setStatusModal}
+      />
+
+      <SellGold
+        isOpen={showSellGoldModal}
+        onClose={() => {
+          setSellGoldModal(false);
+        }}
+        title="Sell Gold"
         setStatusModal={setStatusModal}
       />
 

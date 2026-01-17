@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import styles from './BuyGold.module.css';
+import styles from './SellGold.module.css';
 import backFaq from '../../../assets/images/backIcon.svg';
 import { createGoldOrder, createGoldOrderVerify } from '../../../services/apis/digitalGold.service';
 import { postRequest } from "../../../services/apiClient"
-import BuyGoldStatusModal from './BuyGoldStatusModal';
+import SellGoldStatusModal from './SellGoldStatusModal';
+import Select from 'react-select';
 
-const BuyGold = ({
+const SellGold = ({
     isOpen,
     onClose,
-    title = "Buy Digital Gold",
+    title = "Sell Gold",
     showBackButton = true,
     setStatusModal
 }) => {
@@ -82,44 +83,51 @@ const BuyGold = ({
         }
     };
 
-    const resetForm =() => {
+
+    const resetForm = () => {
         setIsProcessing(false);
         setAmount('');
         onClose();
     }
 
 
-    return (
-        <div className={`${styles.BuyGoldmodalOverlay} ${isOpen ? styles.open : ''}`}>
-            <div className={styles.BuyGoldmodalmodalContainer}>
+    const bankOptions = [
+        { value: 12, label: 'State Bank of India' },
+        { value: 13, label: 'HDFC Bank' },
+    ]
 
-                <div className={styles.BuyGoldmodalmodalHeader}>
+
+    return (
+        <div className={`${styles.SellGoldmodalOverlay} ${isOpen ? styles.open : ''}`}>
+            <div className={styles.SellGoldmodalmodalContainer}>
+
+                <div className={styles.SellGoldmodalmodalHeader}>
                     {showBackButton && (
-                        <div className={styles.BuyGoldmodalcomponent1Parent}>
+                        <div className={styles.SellGoldmodalcomponent1Parent}>
                             <img
-                                className={styles.BuyGoldmodalcomponent1Icon5}
+                                className={styles.SellGoldmodalcomponent1Icon5}
                                 alt="Back"
-                                src={backFaq}
-                                onClick={resetForm}
+                                src={resetForm}
+                                onClick={onClose}
                                 style={{ cursor: 'pointer' }}
                             />
-                            <div className={styles.BuyGoldHeaderTitleWrapper}>
-                                <b className={styles.BuyGoldmodalfaqsheading}>{title}</b>
-                                <span className={styles.BuyGoldSubHeaderText}>24K | 99.94% Pure Gold</span>
+                            <div className={styles.SellGoldHeaderTitleWrapper}>
+                                <b className={styles.SellGoldmodalfaqsheading}>{title}</b>
+                                <span className={styles.SellGoldSubHeaderText}>24K | 99.94% Pure Gold</span>
                             </div>
                         </div>
                     )}
                 </div>
 
-                <div className={styles.BuyGoldMainContentScroll}>
-                    <div className={styles.BuyGoldInnerBody}>
+                <div className={styles.SellGoldMainContentScroll}>
+                    <div className={styles.SellGoldInnerBody}>
 
-                        <div className={styles.BuyGoldInputSection}>
-                            <div className={styles.BuyGoldInputContainer}>
-                                <span className={styles.BuyGoldRupeeSign}>₹</span>
+                        <div className={styles.SellGoldInputSection}>
+                            <div className={styles.SellGoldInputContainer}>
+                                <span className={styles.SellGoldRupeeSign}>₹</span>
                                 <input
                                     type="number"
-                                    className={styles.BuyGoldMainInput}
+                                    className={styles.SellGoldMainInput}
                                     placeholder="0"
                                     value={amount}
                                     onChange={(e) => setAmount(e.target.value)}
@@ -128,11 +136,11 @@ const BuyGold = ({
                         </div>
 
 
-                        <div className={styles.BuyGoldChipList}>
+                        <div className={styles.SellGoldChipList}>
                             {[100, 500, 1000, 5000].map((val) => (
                                 <button
                                     key={val}
-                                    className={styles.BuyGoldQuickChip}
+                                    className={styles.SellGoldQuickChip}
                                     onClick={() => handleQuickSelect(val)}
                                 >
                                     ₹{val}
@@ -141,29 +149,26 @@ const BuyGold = ({
                         </div>
 
 
-                        <div className={styles.BuyGoldCouponBox}>
-                            <div className={styles.BuyGoldCouponLabelGroup}>
-                                <div className={styles.BuyGoldPercentIcon}>%</div>
-                                <span className={styles.BuyGoldCouponTitle}>Use coupon</span>
-                            </div>
-                            <span className={styles.BuyGoldComingSoonTag}>Coming Soon</span>
+
+                        <div className={styles.SellGoldBankSelection}>
+                            <Select options={bankOptions} />
                         </div>
                     </div>
 
 
-                    <div className={styles.BuyGoldActionFooter}>
-                        <p className={styles.BuyGoldLivePriceText}>
-                            LIVE Buy price ₹{livePrice}/gm + 3% GST
+                    <div className={styles.SellGoldActionFooter}>
+                        <p className={styles.SellGoldLivePriceText}>
+                            LIVE Sell price ₹{livePrice}/gm + 3% GST
                         </p>
-                        <button className={styles.BuyGoldSubmitButton} onClick={createGoldOrders} disabled={isProcessing}
+                        <button className={styles.SellGoldSubmitButton} onClick={createGoldOrders} disabled={isProcessing}
                             style={{
                                 opacity: isProcessing ? 0.6 : 1,
                                 cursor: isProcessing ? "not-allowed" : "pointer"
                             }}>
-                            {isProcessing ? "Processing..." : "Buy Gold"}
+                            {isProcessing ? "Processing..." : "Sell Gold"}
                         </button>
-                        <p className={styles.BuyGoldTermsText}>
-                            By continuing you agree to the <span className={styles.BuyGoldTermsLink}>terms and conditions.</span>
+                        <p className={styles.SellGoldTermsText}>
+                            By continuing you agree to the <span className={styles.SellGoldTermsLink}>terms and conditions.</span>
                         </p>
                     </div>
                 </div>
@@ -173,4 +178,4 @@ const BuyGold = ({
     );
 };
 
-export default BuyGold;
+export default SellGold;

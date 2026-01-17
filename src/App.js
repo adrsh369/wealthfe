@@ -6,6 +6,7 @@ import UserLogin from "./screens/UserLogin/UserLogin";
 import DigitalGold from "./screens/DigitalGold/DigitalGoldRoutes";
 import Dashboard from "./screens/Dashboard/Dashboard";
 import { Toaster } from "react-hot-toast";
+import ListPage from "./screens/test/test"
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
 
         <Route element={<PublicRoute />}>
           <Route path="/login" element={<UserLogin />} />
+          <Route path="/ListPage" element={<ListPage />} />
 
         </Route>
 

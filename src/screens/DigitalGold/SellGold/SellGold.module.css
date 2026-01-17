@@ -1,5 +1,5 @@
 /* --- EXISTING MODAL STRUCTURE (Do Not Modify) --- */
-.BuyGoldmodalOverlay {
+.SellGoldmodalOverlay {
     position: fixed;
     top: 0;
     right: -100%;
@@ -12,11 +12,11 @@
     transition: right 0.3s ease-out;
 }
 
-.BuyGoldmodalOverlay.open {
+.SellGoldmodalOverlay.open {
     right: 0;
 }
 
-.BuyGoldmodalmodalContainer {
+.SellGoldmodalmodalContainer {
     width: 100%;
     max-width: 420px;
     height: 100%;
@@ -28,7 +28,7 @@
     overflow: hidden;
 }
 
-.BuyGoldmodalmodalHeader {
+.SellGoldmodalmodalHeader {
     padding: 20px;
     border-bottom: 1px solid #f4f4f4;
     display: flex;
@@ -37,18 +37,18 @@
 }
 
 @media (max-width: 768px) {
-    .BuyGoldmodalmodalHeader {
+    .SellGoldmodalmodalHeader {
         margin-top: 64px;
     }
 }
 
-.BuyGoldmodalcomponent1Parent {
+.SellGoldmodalcomponent1Parent {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-.BuyGoldmodalfaqsheading {
+.SellGoldmodalfaqsheading {
     color: #092042;
     font-family: Lato, sans-serif;
     font-size: 18px;
@@ -58,19 +58,19 @@
 
 
 
-.BuyGoldHeaderTitleWrapper {
+.SellGoldHeaderTitleWrapper {
     display: flex;
     flex-direction: column;
 }
 
-.BuyGoldSubHeaderText {
+.SellGoldSubHeaderText {
     font-size: 12px;
     color: #666;
     font-weight: 500;
 }
 
 
-.BuyGoldMainContentScroll {
+.SellGoldMainContentScroll {
     flex: 1;
     overflow-y: auto;
     display: flex;
@@ -79,15 +79,15 @@
 }
 
 
-.BuyGoldInnerBody {
+.SellGoldInnerBody {
     flex: 1;
 }
 
-.BuyGoldInputSection {
+.SellGoldInputSection {
     margin-bottom: 16px;
 }
 
-.BuyGoldInputContainer {
+.SellGoldInputContainer {
     background-color: #f8f9fb;
     border: 1px solid #eee;
     border-radius: 12px;
@@ -96,14 +96,14 @@
     align-items: center;
 }
 
-.BuyGoldRupeeSign {
+.SellGoldRupeeSign {
     font-size: 22px;
     font-weight: 700;
     color: #092042;
     margin-right: 8px;
 }
 
-.BuyGoldMainInput {
+.SellGoldMainInput {
     border: none;
     background: transparent;
     font-size: 22px;
@@ -113,13 +113,13 @@
     outline: none;
 }
 
-.BuyGoldChipList {
+.SellGoldChipList {
     display: flex;
     gap: 8px;
     margin-bottom: 30px;
 }
 
-.BuyGoldQuickChip {
+.SellGoldQuickChip {
     flex: 1;
     background: #fff;
     border: 1px solid #e0e0e0;
@@ -132,67 +132,33 @@
     transition: all 0.2s ease;
 }
 
-.BuyGoldQuickChip:hover {
+.SellGoldQuickChip:hover {
     background: #fdfdfd;
     border-color: #ccc;
 }
 
-.BuyGoldCouponBox {
-    background-color: #fff5f6;
-    border: 1px dashed #f85c67;
-    border-radius: 12px;
-    padding: 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.SellGoldBankSelection {
+    padding: 2px;
+
 }
 
-.BuyGoldCouponLabelGroup {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
 
-.BuyGoldPercentIcon {
-    background-color: #f85c67;
-    color: white;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: bold;
-}
 
-.BuyGoldCouponTitle {
-    font-weight: 600;
-    color: #333;
-}
-
-.BuyGoldComingSoonTag {
-    font-size: 11px;
-    font-weight: 800;
-    color: #f85c67;
-    text-transform: uppercase;
-}
-
-.BuyGoldActionFooter {
+.SellGoldActionFooter {
     margin-top: 40px;
     padding-bottom: 20px;
     text-align: center;
     margin-bottom: 20px;
 }
 
-.BuyGoldLivePriceText {
+.SellGoldLivePriceText {
     font-size: 13px;
     color: #444;
     font-weight: 600;
     margin-bottom: 16px;
 }
 
-.BuyGoldSubmitButton {
+.SellGoldSubmitButton {
     width: 100%;
     background-color: #1565c0;
     color: white;
@@ -205,14 +171,14 @@
     box-shadow: 0 4px 12px rgba(248, 92, 103, 0.25);
 }
 
-.BuyGoldTermsText {
+.SellGoldTermsText {
     font-size: 11px;
     color: #888;
     margin-top: 16px;
     line-height: 1.5;
 }
 
-.BuyGoldTermsLink {
+.SellGoldTermsLink {
     color: #1565c0;
     font-weight: 700;
     cursor: pointer;
@@ -220,7 +186,7 @@
 }
 
 @media (max-width: 600px) {
-    .BuyGoldmodalmodalContainer {
+    .SellGoldmodalmodalContainer {
         max-width: 100%;
         margin-top: 0;
     }
