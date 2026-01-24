@@ -7,7 +7,7 @@ import { formatINR } from "../../../utils/currency";
 const BuyGoldStatusModal = ({ isOpen, status, details, onClose }) => {
     const isSuccess = status === "success";
 
-    const formattedDate = new Date().toLocaleString("en-IN", {
+    const formattedDate = new Date(details.transactionDate).toLocaleString("en-IN", {
         day: "2-digit",
         month: "short",
         year: "numeric",
@@ -83,9 +83,11 @@ const BuyGoldStatusModal = ({ isOpen, status, details, onClose }) => {
                     {isSuccess ? "Purchase Successful" : "Payment Failed"}
                 </h5>
 
-                <p style={{ fontSize: 13, color: "#666", marginBottom: 20 }}>
-                    {formattedDate}
-                </p>
+                {isSuccess && (
+                    <p style={{ fontSize: 13, color: "#666", marginBottom: 20 }}>
+                        {formattedDate}
+                    </p>
+                )}
 
                 {isSuccess && (
                     <div
@@ -123,7 +125,34 @@ const BuyGoldStatusModal = ({ isOpen, status, details, onClose }) => {
                                     fontWeight: 700
                                 }}
                             >
-                                ₹{formatINR(details.amount)}
+                                {formatINR(details.amount)}
+                            </span>
+                        </div>
+
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center"
+                            }}
+                        >
+                            <span
+                                style={{
+                                    fontSize: 13,
+                                    color: "#6b7280",
+                                    fontWeight: 500
+                                }}
+                            >
+                                Grams:
+                            </span>
+                            <span
+                                style={{
+                                    fontSize: 14,
+                                    color: "#0f172a",
+                                    fontWeight: 700
+                                }}
+                            >
+                                {details.goldInGrams}
                             </span>
                         </div>
 

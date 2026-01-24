@@ -84,10 +84,11 @@ const SellGoldStatusModal = ({ isOpen, status, details, onClose }) => {
                     {isSuccess ? "Gold Sold Successfully" : "Sell Failed"}
                 </h5>
 
-
-                <p style={{ fontSize: 13, color: "#666", marginBottom: 20 }}>
-                    {formattedDate}
-                </p>
+                {isSuccess && (
+                    <p style={{ fontSize: 13, color: "#666", marginBottom: 20 }}>
+                        {formattedDate}
+                    </p>
+                )}
 
                 {isSuccess && (
                     <div

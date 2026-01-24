@@ -93,8 +93,12 @@
     margin: 4px 0 0;
 }
 
-.DashboardGreenText {
+.DashboardGreenTexttotalGain {
     color: #4ade80;
+}
+
+.DashboardRedTexttotalGain {
+    color: #EF4444;
 }
 
 /* Promo Banner */

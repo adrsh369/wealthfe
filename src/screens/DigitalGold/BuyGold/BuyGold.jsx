@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styles from './BuyGold.module.css';
 import backFaq from '../../../assets/images/backIcon.svg';
-import { createGoldOrder, createGoldOrderVerify } from '../../../services/apis/digitalGold.service';
-import { postRequest } from "../../../services/apiClient"
-import BuyGoldStatusModal from './BuyGoldStatusModal';
+import { createGoldOrder, createGoldOrderVerify, buyGoldValidate, goldLivePrice } from '../../../services/apis/digitalGold.service';
+import { Info } from "lucide-react";
 
 const BuyGold = ({
     isOpen,
@@ -13,15 +12,93 @@ const BuyGold = ({
     setStatusModal
 }) => {
     const [amount, setAmount] = useState('');
-    const livePrice = 5428.18;
+    const [livePrice, setLivePrice] = useState(0);
+    const [loadingLivePrice, setLoadingLivePrice] = useState(false);
+
     const [isProcessing, setIsProcessing] = useState(false);
+
+    const [validationMsg, setValidationMsg] = useState('');
+    const [isValidAmount, setIsValidAmount] = useState(false);
+    const debounceRef = useRef(null);
+
+    useEffect(() => {
+        if (!isOpen) {
+            setAmount('');
+            setValidationMsg('');
+            setIsValidAmount(false);
+            setIsProcessing(false);
+        }
+    }, [isOpen]);
+
+    useEffect(() => {
+        if (!isOpen) return;
+
+        const fetchLivePrice = async () => {
+            setLoadingLivePrice(true);
+
+            try {
+                const response = await goldLivePrice();
+
+                if (response.status === 1) {
+                    setLivePrice(response?.pricePerGram || 0);
+                } else {
+                    setLivePrice(0);
+                }
+            } catch {
+                setLivePrice(0);
+            } finally {
+                setLoadingLivePrice(false);
+            }
+        };
+
+        fetchLivePrice();
+    }, [isOpen]);
 
 
     if (!isOpen) return null;
 
+    const validateBuyAmount = async (value) => {
+        setValidationMsg('');
+        setIsValidAmount(false);
+
+        if (!value || Number(value) <= 0) return;
+
+        try {
+            const res = await buyGoldValidate({ amount: Number(value) });
+
+            if (res.status === 1) {
+                setIsValidAmount(true);
+                setValidationMsg(res.message);
+            } else {
+                setIsValidAmount(false);
+                setValidationMsg(res.message);
+            }
+        } catch {
+            setIsValidAmount(false);
+            setValidationMsg('Unable to validate amount. Please try again.');
+        }
+    };
+
+
     const handleQuickSelect = (val) => {
         setAmount(val.toString());
+        validateBuyAmount(val);
     };
+
+
+    const handleAmountChange = (e) => {
+        const value = e.target.value;
+        setAmount(value);
+
+        if (debounceRef.current) {
+            clearTimeout(debounceRef.current);
+        }
+
+        debounceRef.current = setTimeout(() => {
+            validateBuyAmount(value);
+        }, 500);
+    };
+
 
     const createGoldOrders = async () => {
         try {
@@ -51,7 +128,7 @@ const BuyGold = ({
                             setStatusModal({
                                 open: true,
                                 type: 'success',
-                                details: { amount: amount, transactionId: response.transactionId }
+                                details: { amount: verifyRes?.purchaseDetails?.amountPaid, goldInGrams: verifyRes?.purchaseDetails?.goldInGrams, transactionId: response.transactionId, transactionDate: verifyRes?.purchaseDetails?.dateTime }
                             });
                             onClose();
 
@@ -122,10 +199,18 @@ const BuyGold = ({
                                     className={styles.BuyGoldMainInput}
                                     placeholder="0"
                                     value={amount}
-                                    onChange={(e) => setAmount(e.target.value)}
+                                    onChange={handleAmountChange}
                                 />
                             </div>
                         </div>
+
+
+                        {validationMsg && (
+                            <div className={styles.validationBox}>
+                                <Info className={styles.validationIcon} size={18} />
+                                <p className={styles.validationText}>{validationMsg}</p>
+                            </div>
+                        )}
 
 
                         <div className={styles.BuyGoldChipList}>
@@ -153,13 +238,19 @@ const BuyGold = ({
 
                     <div className={styles.BuyGoldActionFooter}>
                         <p className={styles.BuyGoldLivePriceText}>
-                            LIVE Buy price ₹{livePrice}/gm + 3% GST
+                            {loadingLivePrice
+                                ? 'Fetching live price...'
+                                : `LIVE Buy price ₹${livePrice}/gm + 3% GST`}
                         </p>
-                        <button className={styles.BuyGoldSubmitButton} onClick={createGoldOrders} disabled={isProcessing}
+                        <button
+                            className={styles.BuyGoldSubmitButton}
+                            onClick={createGoldOrders}
+                            disabled={isProcessing || !isValidAmount || livePrice === 0}
                             style={{
-                                opacity: isProcessing ? 0.6 : 1,
-                                cursor: isProcessing ? "not-allowed" : "pointer"
-                            }}>
+                                opacity: isProcessing || !isValidAmount || livePrice === 0 ? 0.6 : 1,
+                                cursor: isProcessing || !isValidAmount || livePrice === 0 ? "not-allowed" : "pointer"
+                            }}
+                        >
                             {isProcessing ? "Processing..." : "Buy Gold"}
                         </button>
                         <p className={styles.BuyGoldTermsText}>

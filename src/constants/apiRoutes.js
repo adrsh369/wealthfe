@@ -7,6 +7,7 @@ export const API_ROUTES = {
   GOLD_INVESTED_SUMMARY: "/api/gold/invested-summary",
   GOLD_ORDER_DETAILS: "/api/gold/orders",
 
+  BUY_GOLD_VALIDATE: "/api/gold/validate-buy",
   CREATE_GOLD_ORDER: "/api/payments/create-order",
   CREATE_GOLD_ORDER_VERIFY: "/api/payments/verify",
 
@@ -15,4 +16,6 @@ export const API_ROUTES = {
 
   FETCH_SELL_LIVE_PRICE: "/api/gold/sell-price",
   FETCH_GOLD_LIVE_PRICE: "/api/gold/live-price",
+
+  GET_DASHBOARD_ALL_ASSETS_DETAILS: "/api/users/assets-details"
 }

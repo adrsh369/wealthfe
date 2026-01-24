@@ -225,3 +225,44 @@
         margin-top: 0;
     }
 }
+
+/* -------For Validation start----------- */
+.validationBox {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 12px;
+    padding: 12px 14px;
+    background-color: #eaf4ff;
+    border: 1px solid #cfe4ff;
+    border-radius: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+}
+
+.validationIcon {
+    color: #0b5ed7;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.validationText {
+    font-size: 13px;
+    color: #0b5ed7;
+    line-height: 1.5;
+    margin: 0;
+    word-break: break-word;
+}
+
+@media (max-width: 480px) {
+    .validationBox {
+        padding: 10px 12px;
+    }
+
+    .validationText {
+        font-size: 12px;
+    }
+}
+
+/* -------For Validation End----------- */

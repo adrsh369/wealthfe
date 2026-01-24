@@ -192,6 +192,7 @@
     }
 }
 
+/* -------For Validation start----------- */
 .validationBox {
     display: flex;
     align-items: flex-start;
@@ -229,3 +230,5 @@
         font-size: 12px;
     }
 }
+
+/* -------For Validation End----------- */

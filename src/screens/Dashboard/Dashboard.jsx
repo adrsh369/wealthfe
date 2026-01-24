@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     MoveLeft,
     TrendingUp,
@@ -9,7 +9,8 @@ import {
     ShieldCheck,
     Info,
     PieChart,
-    ArrowRight
+    ArrowRight,
+    TrendingDown
 } from 'lucide-react';
 import styles from './Dashboard.module.css';
 import Navbar from '../../components/Navbar/Navbar';
@@ -18,6 +19,10 @@ import { setAuthFromLogin } from '../../store/auth/auth.slice';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchUserProfile } from '../../store/auth/auth.thunks';
 import { selectProfileLoaded, selectUserName } from "../../store/auth/auth.selectors";
+import { fetchDashboardAllAssets } from '../../services/apis/dashboard.service';
+import { formatINR } from "../../utils/currency";
+import CountUp from 'react-countup';
+import LoadingDots from '../../components/LoadingDots/LoadingDots';
 
 const Dashboard = () => {
     const dispatch = useDispatch();
@@ -25,11 +30,48 @@ const Dashboard = () => {
     const profileLoaded = useSelector(selectProfileLoaded);
     const userName = useSelector(selectUserName)
 
+    const [dashboardData, setDashboardData] = useState(null);
+    const [loadingDashboard, setLoadingDashboard] = useState(false);
+
+
     useEffect(() => {
         if (!profileLoaded) {
             dispatch(fetchUserProfile());
         }
     }, [profileLoaded, dispatch]);
+
+
+    useEffect(() => {
+        const fetchDashboardAssets = async () => {
+            setLoadingDashboard(true);
+
+            try {
+                const res = await fetchDashboardAllAssets();
+
+                console.log("dashboardDatares", res)
+                if (res.status === 1) {
+                    setDashboardData(res);
+                } else {
+                    setDashboardData(null);
+                }
+            } catch {
+                setDashboardData(null);
+            } finally {
+                setLoadingDashboard(false);
+            }
+        };
+
+        fetchDashboardAssets();
+    }, []);
+
+    const totalInvested = dashboardData?.totalInvestedAmt || 0;
+    const totalCurrentValue = dashboardData?.totalCurrentValue || 0;
+    const totalGain = dashboardData?.totalGainInNum || 0;
+    const profitLossPercent = dashboardData?.totalProfitLossPercent || 0;
+
+    const assetDist = dashboardData?.assetsDistribution || {};
+
+
 
 
     const products = [
@@ -62,21 +104,32 @@ const Dashboard = () => {
                             <div className={styles.DashboardPortfolioTop}>
                                 <div className={styles.DashboardBalanceInfo}>
                                     <span className={styles.DashboardLabel}>Current Value</span>
-                                    <h2 className={styles.DashboardMainBalance}>₹ 4,52,890.00</h2>
+                                    <h2 className={styles.DashboardMainBalance}>{loadingDashboard ? <LoadingDots /> : formatINR(totalCurrentValue)}</h2>
                                 </div>
                                 <div className={styles.DashboardGainPill}>
-                                    <TrendingUp size={12} /> +12.5%
+                                    {profitLossPercent < 0 ? (
+                                        <TrendingDown size={12} />
+                                    ) : (
+                                        <TrendingUp size={12} />
+                                    )} {profitLossPercent}%
                                 </div>
                             </div>
                             <div className={styles.DashboardPortfolioDivider}></div>
                             <div className={styles.DashboardPortfolioStats}>
                                 <div className={styles.DashboardStatItem}>
                                     <span className={styles.DashboardLabel}>Invested</span>
-                                    <p className={styles.DashboardStatValue}>₹ 4,07,890</p>
+                                    <p className={styles.DashboardStatValue}>{loadingDashboard ? <LoadingDots /> : formatINR(totalInvested)}</p>
                                 </div>
                                 <div className={styles.DashboardStatItem}>
                                     <span className={styles.DashboardLabel}>Total Gain</span>
-                                    <p className={`${styles.DashboardStatValue} ${styles.DashboardGreenText}`}>+₹ 45,000</p>
+                                    <p
+                                        className={`${styles.DashboardStatValue} ${totalGain < 0
+                                                ? styles.DashboardRedTexttotalGain
+                                                : styles.DashboardGreenTexttotalGain
+                                            }`}
+                                    >
+                                        {loadingDashboard ? <LoadingDots /> : formatINR(totalGain)}
+                                    </p>
                                 </div>
                             </div>
                         </section>
@@ -120,17 +173,17 @@ const Dashboard = () => {
                             <div className={styles.DashboardDistRow}>
                                 <span className={styles.DashboardDistDot} style={{ background: '#FFD700' }}></span>
                                 <p>Digital Gold</p>
-                                <span className={styles.DashboardDistPercent}>70%</span>
+                                <span className={styles.DashboardDistPercent}>{loadingDashboard ? <LoadingDots /> : assetDist?.digitalGold}%</span>
                             </div>
                             <div className={styles.DashboardDistRow}>
                                 <span className={styles.DashboardDistDot} style={{ background: '#1565C0' }}></span>
-                                <p>NPS</p>
-                                <span className={styles.DashboardDistPercent}>30%</span>
+                                <p>Fixed Deposit</p>
+                                <span className={styles.DashboardDistPercent}>{loadingDashboard ? <LoadingDots /> : assetDist?.fd}%</span>
                             </div>
                             <div className={styles.DashboardDistRow}>
                                 <span className={styles.DashboardDistDot} style={{ background: '#058e0f' }}></span>
                                 <p>Mutual Fund</p>
-                                <span className={styles.DashboardDistPercent}>0%</span>
+                                <span className={styles.DashboardDistPercent}>{loadingDashboard ? <LoadingDots /> : assetDist?.mutualFund}%</span>
                             </div>
                         </div>
 

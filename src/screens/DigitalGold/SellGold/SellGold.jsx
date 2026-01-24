@@ -242,7 +242,7 @@ const SellGold = ({
 
                     <div className={styles.SellGoldActionFooter}>
                         <p className={styles.SellGoldLivePriceText}>
-                            LIVE Sell price ₹{formatINR(livePrice)}/gm + 3% GST
+                            LIVE Sell price ₹{formatINR(livePrice)}/gm
                         </p>
                         <button
                             className={styles.SellGoldSubmitButton}

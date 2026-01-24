@@ -5,7 +5,7 @@
 }
 
 .profileNavbar {
-  
+
     padding: 1rem 0;
     background: #fff;
 }
@@ -85,6 +85,7 @@
     padding: 0 18px;
 }
 
+
 .profileCard {
     background: #ffffff;
     border: 1px solid #eef0f2;
@@ -92,6 +93,9 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
     overflow: hidden;
 }
+
+
+
 
 
 .profileCardHeader {
@@ -163,6 +167,26 @@
     letter-spacing: 1px;
     color: #94a3b8;
     margin-bottom: 24px;
+}
+
+@media (max-width: 768px) {
+    .profileContent {
+        padding: 0px,
+
+    }
+
+    .profileCard {
+        border: none,
+    }
+
+    .profileDetailsSection {
+        padding: 4px;
+        margin-top: 20px;
+    }
+
+    .profileCardHeader {
+        padding: 15px
+    }
 }
 
 .profileDataRow {
