@@ -5,6 +5,7 @@ import { getGoldOrders } from "../../../services/apis/digitalGold.service";
 import LoadingDots from "../../../components/LoadingDots/LoadingDots";
 import { useNavigate } from "react-router-dom";
 import { formatINR } from "../../../utils/currency";
+import Navbar from "../../../components/Navbar/Navbar";
 
 const GoldOrderMobileSkeleton = () => {
   return Array.from({ length: 6 }).map((_, i) => (
@@ -58,6 +59,8 @@ const MobileOrders = () => {
     });
 
   return (
+    <>
+    <Navbar />
     <div className={styles.GoldOrderMobileContainer}>
       <header className={styles.GoldOrderMobileHeader}>
         <ArrowLeft size={20} onClick={() => navigate(-1)} />
@@ -113,6 +116,8 @@ const MobileOrders = () => {
         )}
       </div>
     </div>
+
+    </>
   );
 };
 

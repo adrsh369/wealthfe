@@ -16,7 +16,8 @@ export const fetchUserProfile = createAsyncThunk(
           userId: response.userId,
           mobileNo: response.mobileNo,
           name: response.name,
-          email: response.email
+          email: response.email,
+          profileLoaded: true,
         })
       );
     }

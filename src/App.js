@@ -7,6 +7,8 @@ import DigitalGold from "./screens/DigitalGold/DigitalGoldRoutes";
 import Dashboard from "./screens/Dashboard/Dashboard";
 import { Toaster } from "react-hot-toast";
 import ListPage from "./screens/test/test"
+import BottomBar from "./components/BottomBar/BottomBar";
+import Profile from "./screens/UserProfile/Profile";
 
 const App = () => {
   return (
@@ -29,11 +31,14 @@ const App = () => {
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/digitalGold/*" element={<DigitalGold />} />
+          <Route path="/Profile" element={<Profile />} />
         </Route>
 
         <Route path="*" element={<UserLogin />} />
 
       </Routes>
+
+      <BottomBar />
     </BrowserRouter>
   );
 };

@@ -346,3 +346,9 @@
         justify-content: space-between;
     }
 }
+
+@media (max-width: 768px) {
+    .DashboardMainGrid {
+        margin-bottom: 70px;
+    }
+}

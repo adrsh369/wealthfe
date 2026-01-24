@@ -1,0 +1,138 @@
+import React, { useState } from 'react';
+import Select from 'react-select';
+import styles from './Profile.module.css';
+import backIcon from '../../assets/images/backIcon.svg';
+import Navbar from '../../components/Navbar/Navbar';
+
+const Profile = () => {
+    const [isEditing, setIsEditing] = useState(false);
+
+    const userData = {
+        name: "Adarsh Pandey",
+        mobile: "+91 9876543210",
+        email: "adars@gmail.com",
+        profileStatus: 0
+    };
+
+    const customSelectStyles = {
+        control: (base, state) => ({
+            ...base,
+            height: '50px',
+            borderRadius: '10px',
+            border: '1px solid #e2e8f0',
+            boxShadow: state.isFocused ? '0 0 0 1px #1565c0' : 'none',
+            '&:hover': { border: '1px solid #1565c0' }
+        })
+    };
+
+    return (
+        <>
+            <Navbar />
+            <div className={styles.profileWrapper}>
+                {/* Top Navigation */}
+                <header className={styles.profileNavbar}>
+                    <div className={styles.profileNavContent}>
+                        <div className={styles.profileHeaderLeft}>
+                            <img src={backIcon} alt="Back" className={styles.profileBackBtn} />
+                            <h1 className={styles.profileNavTitle}>My Profile</h1>
+                        </div>
+                        {userData.profileStatus === 0 && !isEditing && (
+                            <div className={styles.profileStatusTag}>
+                                <span className={styles.profilePulse}></span> Incomplete
+                            </div>
+                        )}
+                    </div>
+                </header>
+
+                <main className={styles.profileContent}>
+                    {!isEditing ? (
+                        <div className={styles.profileCard}>
+                            <div className={styles.profileCardHeader}>
+                                <div className={styles.profileUserInfo}>
+                                    <div className={styles.profileAvatar}>{userData.name.charAt(0)}</div>
+                                    <div>
+                                        <h2 className={styles.profileNameTitle}>{userData.name}</h2>
+                                        <p className={styles.profileUserEmail}>{userData.email}</p>
+                                    </div>
+                                </div>
+                                {/* <button className={styles.profileEditActionBtn} onClick={() => setIsEditing(true)}>
+                                    Complete Profile
+                                </button> */}
+                            </div>
+
+                            <div className={styles.profileDetailsSection}>
+                                <h3 className={styles.profileGroupHeading}>Basic Information</h3>
+
+                                <div className={styles.profileDataRow}>
+                                    <div className={styles.profileFieldGroup}>
+                                        <label className={styles.profileLabel}>Full Name</label>
+                                        <span className={styles.profileValue}>{userData.name}</span>
+                                    </div>
+                                    <div className={styles.profileFieldGroup}>
+                                        <label className={styles.profileLabel}>Email Address</label>
+                                        <span className={styles.profileValue}>{userData.email}</span>
+                                    </div>
+                                </div>
+
+                                <div className={styles.profileDataRow}>
+                                    <div className={styles.profileFieldGroup}>
+                                        <label className={styles.profileLabel}>Mobile Number</label>
+                                        <span className={styles.profileValue}>{userData.mobile}</span>
+                                    </div>
+                                    <div className={styles.profileFieldGroup}>
+                                        <label className={styles.profileLabel}>Account Status</label>
+                                        <span className={styles.profileValueBadge}>Verification Pending</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className={styles.profileCard}>
+                            <div className={styles.profileFormHeader}>
+                                <h2 className={styles.profileFormTitle}>Update Profile Details</h2>
+                                <p className={styles.profileFormSub}>Please provide valid details as per your PAN card.</p>
+                            </div>
+
+                            <form className={styles.profileFormBody}>
+                                <div className={styles.profileInputGrid}>
+                                    <div className={styles.profileInputWrapper}>
+                                        <label className={styles.profileInputLabel}>Gender</label>
+                                        <Select
+                                            options={[{ label: 'Male', value: 'M' }, { label: 'Female', value: 'F' }]}
+                                            styles={customSelectStyles}
+                                            placeholder="Select Gender"
+                                        />
+                                    </div>
+                                    <div className={styles.profileInputWrapper}>
+                                        <label className={styles.profileInputLabel}>Marital Status</label>
+                                        <Select
+                                            options={[{ label: 'Single', value: 'S' }, { label: 'Married', value: 'M' }]}
+                                            styles={customSelectStyles}
+                                            placeholder="Select Status"
+                                        />
+                                    </div>
+                                    <div className={styles.profileInputWrapper}>
+                                        <label className={styles.profileInputLabel}>Age</label>
+                                        <input type="number" className={styles.profileInputField} placeholder="Enter your age" />
+                                    </div>
+                                    <div className={styles.profileInputWrapper}>
+                                        <label className={styles.profileInputLabel}>PAN Number</label>
+                                        <input type="text" className={styles.profileInputField} placeholder="ABCDE1234F" />
+                                    </div>
+                                </div>
+
+                                <div className={styles.profileFormFooter}>
+                                    <button type="button" className={styles.profileBtnSecondary} onClick={() => setIsEditing(false)}>Cancel</button>
+                                    <button type="submit" className={styles.profileBtnPrimary}>Save Information</button>
+                                </div>
+                            </form>
+                        </div>
+                    )}
+                </main>
+            </div>
+
+        </>
+    );
+};
+
+export default Profile;

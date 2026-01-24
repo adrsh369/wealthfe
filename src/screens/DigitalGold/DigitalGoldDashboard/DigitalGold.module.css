@@ -9,7 +9,12 @@
   color: #092042;
 }
 
-/* --- Header Section --- */
+@media (max-width: 768px){
+  .DigitalGoldDashboardContainer{
+    margin-bottom: 70px;
+  }
+}
+
 .DigitalGoldDashboardHeader {
   display: flex;
   justify-content: space-between;
