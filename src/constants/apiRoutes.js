@@ -6,4 +6,10 @@ export const API_ROUTES = {
 
   CREATE_GOLD_ORDER: "/api/payments/create-order",
   CREATE_GOLD_ORDER_VERIFY: "/api/payments/verify",
+
+  SELL_GOLD_VALIDATE: "/api/sellgold/validatesellgold",
+  INITIATE_SELL_GOLD: "/api/sellgold/sellgold",
+
+  FETCH_SELL_LIVE_PRICE: "/api/gold/sell-price",
+  FETCH_GOLD_LIVE_PRICE: "/api/gold/live-price",
 }

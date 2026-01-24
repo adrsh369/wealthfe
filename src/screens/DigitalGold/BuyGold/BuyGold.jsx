@@ -47,7 +47,7 @@ const BuyGold = ({
                             transactionId: response.transactionId
                         });
 
-                        if (verifyRes.message === "Gold purchased successfully") {
+                        if (verifyRes.status === 1) {
                             setStatusModal({
                                 open: true,
                                 type: 'success',
@@ -82,7 +82,7 @@ const BuyGold = ({
         }
     };
 
-    const resetForm =() => {
+    const resetForm = () => {
         setIsProcessing(false);
         setAmount('');
         onClose();

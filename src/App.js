@@ -22,7 +22,7 @@ const App = () => {
 
         <Route element={<PublicRoute />}>
           <Route path="/login" element={<UserLogin />} />
-          <Route path="/ListPage" element={<ListPage />} />
+          <Route path="/test" element={<ListPage />} />
 
         </Route>
 

@@ -6,13 +6,14 @@ import { motion } from "framer-motion";
 const SellGoldStatusModal = ({ isOpen, status, details, onClose }) => {
     const isSuccess = status === "success";
 
-    const formattedDate = new Date().toLocaleString("en-IN", {
+    const formattedDate = new Date(details.transactionDate).toLocaleString("en-IN", {
         day: "2-digit",
         month: "short",
         year: "numeric",
         hour: "2-digit",
         minute: "2-digit"
     });
+
 
     return (
         <Modal
@@ -21,7 +22,7 @@ const SellGoldStatusModal = ({ isOpen, status, details, onClose }) => {
             centered
             backdrop="static"
             keyboard={false}
-             style={{ zIndex: 99999999 }}
+            style={{ zIndex: 99999999 }}
         >
             <Modal.Body style={{ textAlign: "center", padding: "32px" }}>
                 <motion.div
@@ -79,23 +80,84 @@ const SellGoldStatusModal = ({ isOpen, status, details, onClose }) => {
                 </motion.div>
 
                 <h5 style={{ fontWeight: 700, marginBottom: 8 }}>
-                    {isSuccess ? "Purchase Successful" : "Payment Failed"}
+                    {isSuccess ? "Gold Sold Successfully" : "Sell Failed"}
                 </h5>
+
 
                 <p style={{ fontSize: 13, color: "#666", marginBottom: 20 }}>
                     {formattedDate}
                 </p>
 
-                <div style={{ textAlign: "left", fontSize: 14, marginBottom: 24 }}>
-                    <div style={{ marginBottom: 8 }}>
-                        <strong>Amount:</strong> ₹{details.amount}
-                    </div>
-                    {details.transactionId && (
-                        <div>
-                            <strong>Transaction ID:</strong> {details.transactionId}
+                {isSuccess && (
+                    <div
+                        style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 12,
+                            padding: "14px 16px",
+                            backgroundColor: "#f5faff",
+                            borderRadius: 10,
+                            border: "1px solid #dbeafe",
+                            marginBottom: 24
+                        }}
+                    >
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center"
+                            }}
+                        >
+                            <span
+                                style={{
+                                    fontSize: 13,
+                                    color: "#6b7280",
+                                    fontWeight: 500
+                                }}
+                            >
+                                Amount Credited
+                            </span>
+                            <span
+                                style={{
+                                    fontSize: 14,
+                                    color: "#0f172a",
+                                    fontWeight: 700
+                                }}
+                            >
+                                ₹{details.amountCredited}
+                            </span>
                         </div>
-                    )}
-                </div>
+
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center"
+                            }}
+                        >
+                            <span
+                                style={{
+                                    fontSize: 13,
+                                    color: "#6b7280",
+                                    fontWeight: 500
+                                }}
+                            >
+                                Gold Sold
+                            </span>
+                            <span
+                                style={{
+                                    fontSize: 14,
+                                    color: "#0f172a",
+                                    fontWeight: 700
+                                }}
+                            >
+                                {details.goldSoldInGrams} gm
+                            </span>
+                        </div>
+                    </div>
+                )}
+
+
 
                 <Button
                     onClick={onClose}

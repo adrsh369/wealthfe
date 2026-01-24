@@ -7,12 +7,19 @@ import BuyGold from '../BuyGold/BuyGold';
 import BuyGoldStatusModal from '../BuyGold/BuyGoldStatusModal';
 import backIcon from '../../../assets/images/backIcon.svg';
 import SellGold from '../SellGold/SellGold';
+import SellGoldStatusModal from '../SellGold/SellGoldStatusModal';
 
 const DigitalGold = () => {
   const navigate = useNavigate();
   const [showBuyGoldModal, setBuyGoldModal] = useState(false);
   const [showSellGoldModal, setSellGoldModal] = useState(false);
   const [statusModal, setStatusModal] = useState({
+    open: false,
+    type: '',
+    details: {}
+  });
+
+  const [statusModalSell, setStatusModalSell] = useState({
     open: false,
     type: '',
     details: {}
@@ -186,6 +193,15 @@ const DigitalGold = () => {
         details={statusModal.details}
         onClose={() =>
           setStatusModal({ ...statusModal, open: false })
+        }
+      />
+
+      <SellGoldStatusModal
+        isOpen={statusModalSell.open}
+        status={statusModalSell.type}
+        details={statusModalSell.details}
+        onClose={() =>
+          setStatusModal({ ...statusModalSell, open: false })
         }
       />
 

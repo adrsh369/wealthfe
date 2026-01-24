@@ -1,87 +1,161 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styles from './SellGold.module.css';
 import backFaq from '../../../assets/images/backIcon.svg';
-import { createGoldOrder, createGoldOrderVerify } from '../../../services/apis/digitalGold.service';
-import { postRequest } from "../../../services/apiClient"
+import { initiateSellGold, sellGoldValidate, sellLivePrice } from '../../../services/apis/digitalGold.service';
+import { postRequest, getRequest } from "../../../services/apiClient"
 import SellGoldStatusModal from './SellGoldStatusModal';
 import Select from 'react-select';
+import { Info } from "lucide-react";
+
+import { formatINR } from "../../../utils/currency";
+
 
 const SellGold = ({
     isOpen,
     onClose,
     title = "Sell Gold",
     showBackButton = true,
-    setStatusModal
+    setStatusModalSell
 }) => {
     const [amount, setAmount] = useState('');
-    const livePrice = 5428.18;
+    const [livePrice, setLivePrice] = useState(0);
     const [isProcessing, setIsProcessing] = useState(false);
 
+    const [validationMsg, setValidationMsg] = useState('');
+    const [isValidAmount, setIsValidAmount] = useState(false);
+    const debounceRef = useRef(null);
+
+
+    useEffect(() => {
+        if (!isOpen) {
+            setAmount('');
+            setIsProcessing(false);
+            setValidationMsg('');
+            setIsValidAmount(false);
+        }
+    }, [isOpen]);
+
+
+    useEffect(() => {
+        if (!isOpen) return;
+
+        const fetchLivePrice = async () => {
+            try {
+                const response = await sellLivePrice();
+
+                if (response.status === 1) {
+                    setLivePrice(response?.sellPricePerGram || 0);
+                    console.log("response?.sellPricePerGram", response?.sellPricePerGram)
+                } else {
+                    setLivePrice(0);
+                }
+
+            } catch (err) {
+                setLivePrice(0);
+            }
+        };
+
+        fetchLivePrice();
+    }, [isOpen]);
 
     if (!isOpen) return null;
 
-    const handleQuickSelect = (val) => {
-        setAmount(val.toString());
-    };
 
-    const createGoldOrders = async () => {
+
+
+    const validateSellAmount = async (value) => {
+        setValidationMsg('');
+        setIsValidAmount(false);
+
+        if (!value || Number(value) <= 0) return;
+
         try {
-            setIsProcessing(true);
+            const res = await sellGoldValidate({ amount: Number(value) });
 
-            const response = await createGoldOrder({ amount: amount });
-
-            const options = {
-                key: response.razorpayKey,
-                amount: response.amount,
-                currency: "INR",
-                order_id: response.orderId,
-                method: {
-                    upi: true
-                },
-                prefill: {
-                    vpa: ""
-                },
-                handler: async function (razorpayResponse) {
-                    try {
-                        const verifyRes = await createGoldOrderVerify({
-                            ...razorpayResponse,
-                            transactionId: response.transactionId
-                        });
-
-                        if (verifyRes.message === "Gold purchased successfully") {
-                            setStatusModal({
-                                open: true,
-                                type: 'success',
-                                details: { amount: amount, transactionId: response.transactionId }
-                            });
-                            onClose();
-
-                        } else {
-                            setStatusModal({
-                                open: true,
-                                type: 'failed',
-                                details: { amount: amount }
-                            });
-                            onClose();
-                        }
-                    } finally {
-                        setIsProcessing(false);
-                    }
-                },
-                modal: {
-                    ondismiss: () => {
-                        setIsProcessing(false);
-                    }
-                }
-            };
-
-            const rzp = new window.Razorpay(options);
-            rzp.open();
+            if (res?.status === 1) {
+                setIsValidAmount(true);
+                setValidationMsg(
+                    `You will sell ${res?.gramsToSell} grams of gold for ₹${res?.enteredAmount}.`
+                );
+            } else {
+                setIsValidAmount(false);
+                setValidationMsg(
+                    `${res?.message}. Available balance: ₹${res?.availableGoldInRupees}.`
+                );
+            }
         } catch (err) {
-            setStatusModal({ open: true, type: 'failed', details: { amount: amount } });
-            onClose();
+            setIsValidAmount(false);
+            setValidationMsg('Unable to validate amount. Please try again.');
         }
     };
+
+
+    const handleAmountChange = (e) => {
+        const value = e.target.value;
+        setAmount(value);
+
+        if (debounceRef.current) {
+            clearTimeout(debounceRef.current);
+        }
+
+        debounceRef.current = setTimeout(() => {
+            validateSellAmount(value);
+        }, 500);
+    };
+
+    const handleQuickSelect = (val) => {
+        setAmount(val.toString());
+        validateSellAmount(val);
+    };
+
+
+    const handleSellGold = async () => {
+        if (!isValidAmount || isProcessing) return;
+
+        setIsProcessing(true);
+
+        try {
+            const res = await initiateSellGold({ amount: Number(amount) });
+
+            if (res.status === 1) {
+                setStatusModalSell({
+                    open: true,
+                    type: "success",
+                    details: {
+                        amountCredited: res.amountCredited,
+                        goldSoldInGrams: res.goldSoldInGrams,
+                        sellPricePerGram: res.sellPricePerGram,
+                        transactionDate: res.transactionDate,
+                        walletBalance: res.walletBalance,
+                        goldBalance: res.goldBalance
+                    }
+                });
+
+                onClose();
+            }
+            else {
+                setStatusModalSell({
+                    open: true,
+                    type: "error",
+                    details: {
+                        message: res.message || "Sell transaction failed"
+                    }
+                });
+            }
+        } catch {
+            setStatusModalSell({
+                open: true,
+                type: "error",
+                details: {
+                    message: "Sell transaction failed"
+                }
+            });
+        } finally {
+            setIsProcessing(false);
+        }
+    };
+
+
 
 
     const resetForm = () => {
@@ -107,7 +181,7 @@ const SellGold = ({
                             <img
                                 className={styles.SellGoldmodalcomponent1Icon5}
                                 alt="Back"
-                                src={resetForm}
+                                src={backFaq}
                                 onClick={onClose}
                                 style={{ cursor: 'pointer' }}
                             />
@@ -126,14 +200,24 @@ const SellGold = ({
                             <div className={styles.SellGoldInputContainer}>
                                 <span className={styles.SellGoldRupeeSign}>₹</span>
                                 <input
-                                    type="number"
+                                    type="tel"
                                     className={styles.SellGoldMainInput}
                                     placeholder="0"
                                     value={amount}
-                                    onChange={(e) => setAmount(e.target.value)}
+                                    onChange={handleAmountChange}
                                 />
                             </div>
                         </div>
+
+
+
+                        {validationMsg && (
+                            <div className={styles.validationBox}>
+                                <Info className={styles.validationIcon} size={18} />
+                                <p className={styles.validationText}>{validationMsg}</p>
+                            </div>
+                        )}
+
 
 
                         <div className={styles.SellGoldChipList}>
@@ -150,21 +234,26 @@ const SellGold = ({
 
 
 
-                        <div className={styles.SellGoldBankSelection}>
+                        {/* <div className={styles.SellGoldBankSelection}>
                             <Select options={bankOptions} />
-                        </div>
+                        </div> */}
                     </div>
 
 
                     <div className={styles.SellGoldActionFooter}>
                         <p className={styles.SellGoldLivePriceText}>
-                            LIVE Sell price ₹{livePrice}/gm + 3% GST
+                            LIVE Sell price ₹{formatINR(livePrice)}/gm + 3% GST
                         </p>
-                        <button className={styles.SellGoldSubmitButton} onClick={createGoldOrders} disabled={isProcessing}
+                        <button
+                            className={styles.SellGoldSubmitButton}
+                            disabled={isProcessing || livePrice === 0 || !isValidAmount}
                             style={{
-                                opacity: isProcessing ? 0.6 : 1,
-                                cursor: isProcessing ? "not-allowed" : "pointer"
-                            }}>
+                                opacity: isProcessing || livePrice === 0 || !isValidAmount ? 0.6 : 1,
+                                cursor: isProcessing || livePrice === 0 || !isValidAmount ? "not-allowed" : "pointer"
+                            }}
+                            onClick={handleSellGold}
+                        >
+
                             {isProcessing ? "Processing..." : "Sell Gold"}
                         </button>
                         <p className={styles.SellGoldTermsText}>

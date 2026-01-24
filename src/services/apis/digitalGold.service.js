@@ -1,4 +1,4 @@
-import { postRequest } from "../apiClient"
+import { getRequest, postRequest } from "../apiClient"
 import { API_ROUTES } from "../../constants/apiRoutes"
 
 export const createGoldOrder = (payload) => {
@@ -6,4 +6,16 @@ export const createGoldOrder = (payload) => {
 };
 export const createGoldOrderVerify = (payload) => {
     return postRequest(API_ROUTES.CREATE_GOLD_ORDER_VERIFY, payload)
+};
+
+export const sellLivePrice = (payload) => {
+    return getRequest(API_ROUTES.FETCH_SELL_LIVE_PRICE, payload)
+};
+
+export const sellGoldValidate = (payload) => {
+    return postRequest(API_ROUTES.SELL_GOLD_VALIDATE, payload)
+};
+
+export const initiateSellGold = (payload) => {
+    return postRequest(API_ROUTES.INITIATE_SELL_GOLD, payload)
 };
