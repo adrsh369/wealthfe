@@ -9,6 +9,7 @@ import { Toaster } from "react-hot-toast";
 import ListPage from "./screens/test/test"
 import BottomBar from "./components/BottomBar/BottomBar";
 import Profile from "./screens/UserProfile/Profile";
+import ProtectedLayout from "./routes/ProtectedLayout";
 
 const App = () => {
   return (
@@ -29,16 +30,17 @@ const App = () => {
         </Route>
 
         <Route element={<ProtectedRoute />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/digitalGold/*" element={<DigitalGold />} />
-          <Route path="/Profile" element={<Profile />} />
+          <Route element={<ProtectedLayout />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/digitalGold/*" element={<DigitalGold />} />
+            <Route path="/Profile" element={<Profile />} />
+          </Route>
         </Route>
 
         <Route path="*" element={<UserLogin />} />
 
       </Routes>
 
-      <BottomBar />
     </BrowserRouter>
   );
 };

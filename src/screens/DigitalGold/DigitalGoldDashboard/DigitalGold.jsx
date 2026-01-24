@@ -96,10 +96,10 @@ const DigitalGold = () => {
     }
   };
 
-  // useEffect(() => {
-  //   getGoldInvestedSummary();
-  //   fetchLivePrice();
-  // }, []);
+  useEffect(() => {
+    getGoldInvestedSummary();
+    fetchLivePrice();
+  }, []);
 
 
   const fetchDesktopGoldOrders = async () => {
@@ -119,11 +119,11 @@ const DigitalGold = () => {
   };
 
 
-  // useEffect(() => {
-  //   if (isDesktopUtils) {
-  //     fetchDesktopGoldOrders ();
-  //   }
-  // }, [isDesktopUtils]);
+  useEffect(() => {
+    if (isDesktopUtils) {
+      fetchDesktopGoldOrders ();
+    }
+  }, [isDesktopUtils]);
 
 
   const getCountUpStart = (value) => {

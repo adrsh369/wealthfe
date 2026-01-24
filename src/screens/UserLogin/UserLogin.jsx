@@ -59,10 +59,8 @@ const UserLogin = () => {
 
       if (response?.status === 1) {
         setStep('login');
-        toast.success('User found! Please enter your password');
       } else if (response?.status === 0) {
         setStep('register');
-        toast.success('Create your account');
       } else {
         toast.error("Please try again later")
       }
