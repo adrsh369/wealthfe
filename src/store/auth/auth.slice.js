@@ -51,6 +51,7 @@ const authSlice = createSlice({
 
       state.name = data.name || state.name;
       state.email = data.email || state.email;
+      state.mobileNo = data.mobileNo || state.mobileNo;
 
       state.profileLoaded = true;
     },

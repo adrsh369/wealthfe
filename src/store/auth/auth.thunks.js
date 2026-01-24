@@ -14,7 +14,7 @@ export const fetchUserProfile = createAsyncThunk(
         setAuthFromLogin({
           authToken: existingToken,
           userId: response.userId,
-          mobileNo: response.mobileNo,
+          mobileNo: response.mobile,
           name: response.name,
           email: response.email,
           profileLoaded: true,

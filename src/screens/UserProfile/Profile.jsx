@@ -3,8 +3,13 @@ import Select from 'react-select';
 import styles from './Profile.module.css';
 import backIcon from '../../assets/images/backIcon.svg';
 import Navbar from '../../components/Navbar/Navbar';
+import { selectProfileLoaded, selectUserEmail, selectUserName, selectUserMobileNo } from "../../store/auth/auth.selectors";
+import { useSelector, useDispatch } from 'react-redux';
 
 const Profile = () => {
+     const userName = useSelector(selectUserName)
+     const userEmail = useSelector(selectUserEmail)
+     const userMobileNo= useSelector(selectUserMobileNo)
     const [isEditing, setIsEditing] = useState(false);
 
     const userData = {
@@ -49,10 +54,10 @@ const Profile = () => {
                         <div className={styles.profileCard}>
                             <div className={styles.profileCardHeader}>
                                 <div className={styles.profileUserInfo}>
-                                    <div className={styles.profileAvatar}>{userData.name.charAt(0)}</div>
+                                    <div className={styles.profileAvatar}>{userName.charAt(0)}</div>
                                     <div>
-                                        <h2 className={styles.profileNameTitle}>{userData.name}</h2>
-                                        <p className={styles.profileUserEmail}>{userData.email}</p>
+                                        <h2 className={styles.profileNameTitle}>{userName}</h2>
+                                        <p className={styles.profileUserEmail}>{userEmail}</p>
                                     </div>
                                 </div>
                                 {/* <button className={styles.profileEditActionBtn} onClick={() => setIsEditing(true)}>
@@ -66,18 +71,18 @@ const Profile = () => {
                                 <div className={styles.profileDataRow}>
                                     <div className={styles.profileFieldGroup}>
                                         <label className={styles.profileLabel}>Full Name</label>
-                                        <span className={styles.profileValue}>{userData.name}</span>
+                                        <span className={styles.profileValue}>{userName}</span>
                                     </div>
                                     <div className={styles.profileFieldGroup}>
                                         <label className={styles.profileLabel}>Email Address</label>
-                                        <span className={styles.profileValue}>{userData.email}</span>
+                                        <span className={styles.profileValue}>{userEmail}</span>
                                     </div>
                                 </div>
 
                                 <div className={styles.profileDataRow}>
                                     <div className={styles.profileFieldGroup}>
                                         <label className={styles.profileLabel}>Mobile Number</label>
-                                        <span className={styles.profileValue}>{userData.mobile}</span>
+                                        <span className={styles.profileValue}>{userMobileNo}</span>
                                     </div>
                                     <div className={styles.profileFieldGroup}>
                                         <label className={styles.profileLabel}>Account Status</label>

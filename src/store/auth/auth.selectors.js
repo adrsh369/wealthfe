@@ -17,4 +17,5 @@ export const selectProfileLoaded = state =>
 
 export const selectUserName = state => state.auth.name;
 export const selectUserEmail = state => state.auth.email;
+export const selectUserMobileNo = state => state.auth.mobileNo;
 
