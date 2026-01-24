@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { MoveLeft, Calendar, Coins, Play, CircleStar, ChevronRight, CheckCircle2, Clock } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { MoveLeft, Calendar, Coins, Play, CircleStar, ChevronRight, CheckCircle2, Clock, ArrowLeft, ArrowUpRight, ArrowDownLeft } from 'lucide-react';
 import styles from './DigitalGold.module.css';
 import Navbar from '../../../components/Navbar/Navbar';
 import { useNavigate } from 'react-router-dom';
@@ -8,11 +8,20 @@ import BuyGoldStatusModal from '../BuyGold/BuyGoldStatusModal';
 import backIcon from '../../../assets/images/backIcon.svg';
 import SellGold from '../SellGold/SellGold';
 import SellGoldStatusModal from '../SellGold/SellGoldStatusModal';
+import { fetchGoldInvestedSummary, getGoldOrders, goldLivePrice } from '../../../services/apis/digitalGold.service';
+import { formatINR } from '../../../utils/currency';
+import CountUp from 'react-countup';
+import LoadingDots from '../../../components/LoadingDots/LoadingDots';
+import useDeviceCheck from '../../../utils/useDeviceCheck'
+import DesktopOrderSkeleton from '../../../components/SkeletonLoading/GoldOrdersSkeleton/DesktopOrderSkeleton';
 
 const DigitalGold = () => {
+  const { isMobileUtils, isDesktopUtils } = useDeviceCheck();
   const navigate = useNavigate();
   const [showBuyGoldModal, setBuyGoldModal] = useState(false);
   const [showSellGoldModal, setSellGoldModal] = useState(false);
+  const [livePrice, setLivePrice] = useState(0);
+  const [loadingLivePrice, setLoadingLivePrice] = useState(false);
   const [statusModal, setStatusModal] = useState({
     open: false,
     type: '',
@@ -25,11 +34,114 @@ const DigitalGold = () => {
     details: {}
   });
 
-  const orders = [
-    { type: 'Bought', rate: '7500/gm', tag: 'SIP', date: '10/01/2024', amount: '₹ 1,36,720', weight: '20 gm gold', status: 'success' },
-    { type: 'Sold', rate: '7456/gm', tag: '', date: '10/01/2024', amount: '₹ 1,709', weight: '0.250 gm gold', status: 'pending' },
-    { type: 'Bought', rate: '7500/gm', tag: 'SIP', date: '20/01/2024', amount: '₹ 3,418', weight: '0.5 gm gold', status: 'success' },
-  ];
+  const [goldInvestedSummary, setGoldInvestedSummary] = useState({
+    totalInvestedAmount: null,
+    totalGrams: null
+  });
+
+  const [orders, setOrders] = useState([]);
+  const [ordersLoading, setOrdersLoading] = useState(false);
+
+
+
+  const getGoldInvestedSummary = async () => {
+    try {
+      const res = await fetchGoldInvestedSummary();
+      if (res.status === 1) {
+        setGoldInvestedSummary({
+          totalInvestedAmount: res.totalInvestedAmount || 0,
+          totalGrams: res.totalGoldInGrams || 0
+        });
+      } else {
+        setGoldInvestedSummary({
+          totalInvestedAmount: 0,
+          totalGrams: 0
+        });
+      }
+    } catch (err) {
+      console.error("Error fetching gold summary:", err);
+      setGoldInvestedSummary({
+        totalInvestedAmount: 0,
+        totalGrams: 0
+      });
+    }
+  };
+
+  const fetchLivePrice = async () => {
+    setLoadingLivePrice(true);
+
+    try {
+      const response = await goldLivePrice();
+
+      if (response.status === 1) {
+        setLivePrice(response?.pricePerGram || 0);
+      } else {
+        setLivePrice(0);
+      }
+
+    } catch (err) {
+      setLivePrice(0);
+    } finally {
+      setLoadingLivePrice(false);
+    }
+  };
+
+  // useEffect(() => {
+  //   getGoldInvestedSummary();
+  //   fetchLivePrice();
+  // }, []);
+
+
+  const fetchDesktopGoldOrders = async () => {
+    setOrdersLoading(true);
+    try {
+      const res = await getGoldOrders();
+      if (res.status === 1) {
+        setOrders(res.orders || []);
+      } else {
+        setOrders([]);
+      }
+    } catch {
+      setOrders([]);
+    } finally {
+      setOrdersLoading(false);
+    }
+  };
+
+
+  useEffect(() => {
+    if (isDesktopUtils) {
+      fetchDesktopGoldOrders ();
+    }
+  }, [isDesktopUtils]);
+
+
+  const getCountUpStart = (value) => {
+    if (typeof value !== "number") return 0;
+    return Math.floor(value / 1000) * 1000;
+  };
+
+  const getGramsStart = (value) => {
+    if (typeof value !== "number") return 0;
+    return Number((value - 0.01).toFixed(4));
+  };
+
+  const refreshAfterTransaction = () => {
+    getGoldInvestedSummary();
+    if (isDesktopUtils) {
+      fetchDesktopGoldOrders();
+    }
+  };
+
+  const formatOrderDate = (date) =>
+    new Date(date).toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric"
+    });
+
+  const getOrderMeta = (order) =>
+    `${order.orderType === "BUY" ? "Bought" : "Sold"}`;
 
   return (
     <>
@@ -47,7 +159,14 @@ const DigitalGold = () => {
               <span className={styles.DigitalGoldDashboardPulseDot}></span>
               <span className={styles.DigitalGoldDashboardLiveText}>Live Price:</span>
             </div>
-            <span className={styles.DigitalGoldDashboardPriceValue}>₹ 7,427.94/gm</span>
+            <span className={styles.DigitalGoldDashboardPriceValue}>
+              {loadingLivePrice ? (
+                <LoadingDots />
+              ) : (
+                `${formatINR(livePrice)}/gm`
+              )}
+            </span>
+
           </div>
         </header>
 
@@ -59,8 +178,34 @@ const DigitalGold = () => {
               <div className={styles.DigitalGoldDashboardSavingsTop}>
                 <div className={styles.DigitalGoldDashboardSavingsText}>
                   <p className={styles.DigitalGoldDashboardLabel}>Your savings</p>
-                  <h1 className={styles.DigitalGoldDashboardBalance}>₹ 1,55,410</h1>
-                  <p className={styles.DigitalGoldDashboardWeight}>22.46 grams</p>
+                  {/* <h1 className={styles.DigitalGoldDashboardBalance}>{formatINR(goldInvestedSummary.totalInvestedAmount)}</h1> */}
+                  <h1 className={styles.DigitalGoldDashboardBalance}>
+                    {goldInvestedSummary.totalInvestedAmount === null ? (
+                      <LoadingDots />
+                    ) : (
+                      <CountUp
+                        start={getCountUpStart(goldInvestedSummary.totalInvestedAmount)}
+                        end={goldInvestedSummary.totalInvestedAmount}
+                        duration={1.4}
+                        separator=","
+                        prefix="₹"
+                      />
+                    )}
+                  </h1>
+                  {/* <p className={styles.DigitalGoldDashboardWeight}>{goldInvestedSummary.totalGrams} grams</p> */}
+                  <p className={styles.DigitalGoldDashboardWeight}>
+                    {goldInvestedSummary.totalGrams === null ? (
+                      <LoadingDots />
+                    ) : (
+                      <CountUp
+                        start={getGramsStart(goldInvestedSummary.totalGrams)}
+                        end={goldInvestedSummary.totalGrams}
+                        decimals={4}
+                        duration={1.2}
+                      />
+
+                    )} grams
+                  </p>
                 </div>
                 <div className={styles.DigitalGoldDashboardSavingsIcon}>
                   <CircleStar size={36} color="#FFD700" fill="#FFD700" fillOpacity={0.3} />
@@ -132,35 +277,53 @@ const DigitalGold = () => {
             </section>
           </div>
 
-          {/* Sidebar Order History - Fully Styled */}
+
           <aside className={styles.DigitalGoldDashboardOrderSidebar}>
             <div className={styles.DigitalGoldDashboardSectionHeader}>
               <h3>Order history</h3>
-              <a href="#" className={styles.DigitalGoldDashboardLink}>View all</a>
             </div>
+
             <div className={styles.DigitalGoldDashboardOrderList}>
-              {orders.map((order, idx) => (
-                <div key={idx} className={styles.DigitalGoldDashboardOrderItem}>
-                  <div className={styles.DigitalGoldDashboardOrderIconBox}>
-                    {order.status === 'success' ?
-                      <CheckCircle2 size={16} color="#2e7d32" /> :
-                      <Clock size={16} color="#ed6c02" />
-                    }
-                  </div>
-                  <div className={styles.DigitalGoldDashboardOrderDetails}>
-                    <p className={styles.DigitalGoldDashboardOrderType}>
-                      {order.type} | {order.rate} {order.tag && `| ${order.tag}`}
-                    </p>
-                    <p className={styles.DigitalGoldDashboardOrderMeta}>{order.date}</p>
-                  </div>
-                  <div className={styles.DigitalGoldDashboardOrderValue}>
-                    <p className={styles.DigitalGoldDashboardAmount}>{order.amount}</p>
-                    <p className={styles.DigitalGoldDashboardWeightSub}>{order.weight}</p>
-                  </div>
+              {ordersLoading ? (
+                 <DesktopOrderSkeleton count={10} />
+              ) : orders.length === 0 ? (
+                <div className={styles.DigitalGoldDashboardEmptyState}>
+                  No orders found
                 </div>
-              ))}
+              ) : (
+                orders.map((order, idx) => (
+                  <div key={idx} className={styles.DigitalGoldDashboardOrderItem}>
+                    <div className={styles.DigitalGoldDashboardOrderIconBox}>
+                      {order.orderType === "BUY" ? (
+                        <ArrowDownLeft size={16} color="#2e7d32" />
+                      ) : (
+                        <ArrowUpRight size={16} color="#ed6c02" />
+                      )}
+                    </div>
+
+                    <div className={styles.DigitalGoldDashboardOrderDetails}>
+                      <p className={styles.DigitalGoldDashboardOrderType}>
+                        {getOrderMeta(order)}
+                      </p>
+                      <p className={styles.DigitalGoldDashboardOrderMeta}>
+                        {formatOrderDate(order.transactionDate)}
+                      </p>
+                    </div>
+
+                    <div className={styles.DigitalGoldDashboardOrderValue}>
+                      <p className={styles.DigitalGoldDashboardAmount}>
+                        ₹ {order.amountInRupees.toLocaleString("en-IN")}
+                      </p>
+                      <p className={styles.DigitalGoldDashboardWeightSub}>
+                        {order.goldInGrams} gm
+                      </p>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </aside>
+
         </main>
       </div>
 
@@ -169,11 +332,8 @@ const DigitalGold = () => {
         isOpen={showBuyGoldModal}
         onClose={() => {
           setBuyGoldModal(false);
+          refreshAfterTransaction();
         }}
-        // onConfirm={handleOtpConfirm}
-        // onResend={sendOTPConcent}
-        // autoRead={true}
-        // externalError={otpError}
         title="Buy Gold"
         setStatusModal={setStatusModal}
       />
@@ -182,6 +342,7 @@ const DigitalGold = () => {
         isOpen={showSellGoldModal}
         onClose={() => {
           setSellGoldModal(false);
+          refreshAfterTransaction();
         }}
         title="Sell Gold"
         setStatusModal={setStatusModal}

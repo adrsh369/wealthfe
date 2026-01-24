@@ -37,7 +37,7 @@
   border-radius: 100px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   gap: 8px;
   border: 1px solid #edf2f7;
 }
@@ -167,15 +167,46 @@
 .DigitalGoldDashboardOrderSidebar {
   background: white;
   border-radius: 16px;
-  padding: 20px;
+  padding: 10px;
   border: 1px solid #edf2f7;
-  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 228px);
 }
+
+.DigitalGoldDashboardOrderList {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 6px;
+
+}
+
+
+.DigitalGoldDashboardOrderList::-webkit-scrollbar {
+  width: 5px;
+}
+
+.DigitalGoldDashboardOrderList::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #cbd5e1, #94a3b8);
+  border-radius: 10px;
+}
+
+.DigitalGoldDashboardOrderList::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.DigitalGoldDashboardOrderList {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+
+
 
 .DigitalGoldDashboardOrderItem {
   display: flex;
   align-items: flex-start;
-  padding: 16px 0;
+  padding: 5px 0;
   border-bottom: 1px solid #f8fafc;
 }
 
@@ -451,7 +482,6 @@
 }
 
 
-/* --- Responsive --- */
 @media (max-width: 1024px) {
   .DigitalGoldDashboardMain {
     grid-template-columns: 1fr;
@@ -461,7 +491,6 @@
     display: none;
   }
 
-  /* Requirement: No Orders on Mobile */
 }
 
 @media (max-width: 640px) {

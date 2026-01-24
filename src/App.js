@@ -28,7 +28,7 @@ const App = () => {
 
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/digitalGold" element={<DigitalGold />} />
+          <Route path="/digitalGold/*" element={<DigitalGold />} />
         </Route>
 
         <Route path="*" element={<UserLogin />} />

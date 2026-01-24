@@ -4,6 +4,9 @@ export const API_ROUTES = {
   USER_Register: "/api/auth/register",
   USER_PROFILE: "/api/users/getprofile",
 
+  GOLD_INVESTED_SUMMARY: "/api/gold/invested-summary",
+  GOLD_ORDER_DETAILS: "/api/gold/orders",
+
   CREATE_GOLD_ORDER: "/api/payments/create-order",
   CREATE_GOLD_ORDER_VERIFY: "/api/payments/verify",
 

@@ -2,6 +2,7 @@ import React from "react";
 import { Modal, Button } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { motion } from "framer-motion";
+import { formatINR } from "../../../utils/currency";
 
 const BuyGoldStatusModal = ({ isOpen, status, details, onClose }) => {
     const isSuccess = status === "success";
@@ -21,7 +22,7 @@ const BuyGoldStatusModal = ({ isOpen, status, details, onClose }) => {
             centered
             backdrop="static"
             keyboard={false}
-             style={{ zIndex: 99999999 }}
+            style={{ zIndex: 99999999 }}
         >
             <Modal.Body style={{ textAlign: "center", padding: "32px" }}>
                 <motion.div
@@ -86,16 +87,74 @@ const BuyGoldStatusModal = ({ isOpen, status, details, onClose }) => {
                     {formattedDate}
                 </p>
 
-                <div style={{ textAlign: "left", fontSize: 14, marginBottom: 24 }}>
-                    <div style={{ marginBottom: 8 }}>
-                        <strong>Amount:</strong> ₹{details.amount}
-                    </div>
-                    {details.transactionId && (
-                        <div>
-                            <strong>Transaction ID:</strong> {details.transactionId}
+                {isSuccess && (
+                    <div
+                        style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 12,
+                            padding: "14px 16px",
+                            backgroundColor: "#f5faff",
+                            borderRadius: 10,
+                            border: "1px solid #dbeafe",
+                            marginBottom: 24
+                        }}
+                    >
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center"
+                            }}
+                        >
+                            <span
+                                style={{
+                                    fontSize: 13,
+                                    color: "#6b7280",
+                                    fontWeight: 500
+                                }}
+                            >
+                                Amount:
+                            </span>
+                            <span
+                                style={{
+                                    fontSize: 14,
+                                    color: "#0f172a",
+                                    fontWeight: 700
+                                }}
+                            >
+                                ₹{formatINR(details.amount)}
+                            </span>
                         </div>
-                    )}
-                </div>
+
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center"
+                            }}
+                        >
+                            <span
+                                style={{
+                                    fontSize: 13,
+                                    color: "#6b7280",
+                                    fontWeight: 500
+                                }}
+                            >
+                                Transaction ID:
+                            </span>
+                            <span
+                                style={{
+                                    fontSize: 14,
+                                    color: "#0f172a",
+                                    fontWeight: 700
+                                }}
+                            >
+                                {details.transactionId}
+                            </span>
+                        </div>
+                    </div>
+                )}
 
                 <Button
                     onClick={onClose}

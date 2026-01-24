@@ -2,6 +2,7 @@ import React from "react";
 import { Modal, Button } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { motion } from "framer-motion";
+import { formatINR } from "../../../utils/currency";
 
 const SellGoldStatusModal = ({ isOpen, status, details, onClose }) => {
     const isSuccess = status === "success";
@@ -124,7 +125,7 @@ const SellGoldStatusModal = ({ isOpen, status, details, onClose }) => {
                                     fontWeight: 700
                                 }}
                             >
-                                ₹{details.amountCredited}
+                                ₹{formatINR(details.amountCredited)}
                             </span>
                         </div>
 
