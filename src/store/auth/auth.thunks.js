@@ -5,7 +5,7 @@ import { setAuthFromLogin } from "./auth.slice";
 export const fetchUserProfile = createAsyncThunk(
   "auth/fetchUserProfile",
   async (_, { dispatch, getState }) => {
-    const response = await getRequest("/api/users/getprofile");
+    const response = await getRequest("/api/users/loginDetails");
 
     if (response?.userId) {
       const existingToken = getState().auth.authToken;
