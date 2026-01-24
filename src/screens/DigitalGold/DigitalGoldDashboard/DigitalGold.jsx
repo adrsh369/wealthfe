@@ -18,10 +18,13 @@ import DesktopOrderSkeleton from '../../../components/SkeletonLoading/GoldOrders
 const DigitalGold = () => {
   const { isMobileUtils, isDesktopUtils } = useDeviceCheck();
   const navigate = useNavigate();
+  const [activeVideoId, setActiveVideoId] = useState(null);
   const [showBuyGoldModal, setBuyGoldModal] = useState(false);
   const [showSellGoldModal, setSellGoldModal] = useState(false);
   const [livePrice, setLivePrice] = useState(0);
   const [loadingLivePrice, setLoadingLivePrice] = useState(false);
+  const [loadingInvestedSummary, setLoadingInvestedSummary] = useState(false);
+  const [summaryError, setSummaryError] = useState(true);
   const [statusModal, setStatusModal] = useState({
     open: false,
     type: '',
@@ -45,18 +48,22 @@ const DigitalGold = () => {
 
 
   const getGoldInvestedSummary = async () => {
+    setLoadingInvestedSummary(true);
+    setSummaryError(false);
+
     try {
       const res = await fetchGoldInvestedSummary();
-      if (res.status === 1) {
+      if (res?.status === 1) {
         setGoldInvestedSummary({
-          totalInvestedAmount: res.totalInvestedAmount || 0,
-          totalGrams: res.totalGoldInGrams || 0
+          totalInvestedAmount: res?.totalInvestedAmount || 0,
+          totalGrams: res?.totalGoldInGrams || 0
         });
       } else {
         setGoldInvestedSummary({
           totalInvestedAmount: 0,
           totalGrams: 0
         });
+        setSummaryError(true);
       }
     } catch (err) {
       console.error("Error fetching gold summary:", err);
@@ -64,6 +71,9 @@ const DigitalGold = () => {
         totalInvestedAmount: 0,
         totalGrams: 0
       });
+      setSummaryError(true);
+    } finally {
+      setLoadingInvestedSummary(false)
     }
   };
 
@@ -109,11 +119,11 @@ const DigitalGold = () => {
   };
 
 
-  useEffect(() => {
-    if (isDesktopUtils) {
-      fetchDesktopGoldOrders ();
-    }
-  }, [isDesktopUtils]);
+  // useEffect(() => {
+  //   if (isDesktopUtils) {
+  //     fetchDesktopGoldOrders ();
+  //   }
+  // }, [isDesktopUtils]);
 
 
   const getCountUpStart = (value) => {
@@ -122,7 +132,7 @@ const DigitalGold = () => {
   };
 
   const getGramsStart = (value) => {
-    if (typeof value !== "number") return 0;
+    if (typeof value !== "number" || value <= 0) return 0;
     return Number((value - 0.01).toFixed(4));
   };
 
@@ -142,6 +152,22 @@ const DigitalGold = () => {
 
   const getOrderMeta = (order) =>
     `${order.orderType === "BUY" ? "Bought" : "Sold"}`;
+
+
+  const goldVideos = [
+    {
+      id: 1,
+      title: "Investment Tips: How to Invest in Digital Gold?",
+      youtubeId: "ia35C5WhFNk",
+      duration: "6:02"
+    },
+    {
+      id: 2,
+      title: "Digital Gold vs Physical Gold | What is Digital Gold",
+      youtubeId: "OS2NfDMTpeM",
+      duration: "10:55"
+    }
+  ];
 
   return (
     <>
@@ -178,34 +204,47 @@ const DigitalGold = () => {
               <div className={styles.DigitalGoldDashboardSavingsTop}>
                 <div className={styles.DigitalGoldDashboardSavingsText}>
                   <p className={styles.DigitalGoldDashboardLabel}>Your savings</p>
-                  {/* <h1 className={styles.DigitalGoldDashboardBalance}>{formatINR(goldInvestedSummary.totalInvestedAmount)}</h1> */}
-                  <h1 className={styles.DigitalGoldDashboardBalance}>
-                    {goldInvestedSummary.totalInvestedAmount === null ? (
-                      <LoadingDots />
-                    ) : (
-                      <CountUp
-                        start={getCountUpStart(goldInvestedSummary.totalInvestedAmount)}
-                        end={goldInvestedSummary.totalInvestedAmount}
-                        duration={1.4}
-                        separator=","
-                        prefix="₹"
-                      />
-                    )}
-                  </h1>
-                  {/* <p className={styles.DigitalGoldDashboardWeight}>{goldInvestedSummary.totalGrams} grams</p> */}
-                  <p className={styles.DigitalGoldDashboardWeight}>
-                    {goldInvestedSummary.totalGrams === null ? (
-                      <LoadingDots />
-                    ) : (
-                      <CountUp
-                        start={getGramsStart(goldInvestedSummary.totalGrams)}
-                        end={goldInvestedSummary.totalGrams}
-                        decimals={4}
-                        duration={1.2}
-                      />
+                  {summaryError ? (
+                    <div className={styles.DigitalGoldDashboardErrorContainer}>
+                      <p className={styles.DigitalGoldDashboardErrorText}>Failed to load savings</p>
+                      <button
+                        className={styles.DigitalGoldDashboardRetryBtn}
+                        onClick={getGoldInvestedSummary}
+                      >
+                        Try Again
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <h1 className={styles.DigitalGoldDashboardBalance}>
+                        {loadingInvestedSummary ? (
+                          <LoadingDots />
+                        ) : (
+                          <CountUp
+                            start={getCountUpStart(goldInvestedSummary.totalInvestedAmount || 0)}
+                            end={goldInvestedSummary.totalInvestedAmount || 0}
+                            duration={1.4}
+                            separator=","
+                            prefix="₹"
+                          />
+                        )}
+                      </h1>
+                      {/* <p className={styles.DigitalGoldDashboardWeight}>{goldInvestedSummary.totalGrams} grams</p> */}
+                      <p className={styles.DigitalGoldDashboardWeight}>
+                        {loadingInvestedSummary ? (
+                          <LoadingDots />
+                        ) : (
+                          <CountUp
+                            start={getGramsStart(goldInvestedSummary.totalGrams || 0)}
+                            end={goldInvestedSummary.totalGrams || 0}
+                            decimals={4}
+                            duration={1.2}
+                          />
 
-                    )} grams
-                  </p>
+                        )} grams
+                      </p>
+                    </>
+                  )}
                 </div>
                 <div className={styles.DigitalGoldDashboardSavingsIcon}>
                   <CircleStar size={36} color="#FFD700" fill="#FFD700" fillOpacity={0.3} />
@@ -254,21 +293,52 @@ const DigitalGold = () => {
                 <a href="#" className={styles.DigitalGoldDashboardLink}>View All</a>
               </div>
               <div className={styles.DigitalGoldDashboardVideoGrid}>
-                {[1, 2].map((i) => (
-                  <div key={i} className={styles.DigitalGoldDashboardVideoCard}>
+                {goldVideos.map((video) => (
+                  <div key={video.id} className={styles.DigitalGoldDashboardVideoCard}>
                     <div className={styles.DigitalGoldDashboardVideoThumb}>
-                      <div className={styles.DigitalGoldDashboardPlayOverlay}>
-                        <div className={styles.DigitalGoldDashboardPlayCircle}>
-                          <Play size={12} fill="white" color="white" />
-                        </div>
-                      </div>
-                      <span className={styles.DigitalGoldDashboardDuration}>3:35</span>
+                      {activeVideoId === video.id ? (
+                        /* The Video Player */
+                        <iframe
+                          src={`https://www.youtube.com/embed/${video.youtubeId}?autoplay=1&rel=0`}
+                          title={video.title}
+                          className={styles.DigitalGoldDashboardInlinePlayer}
+                          frameBorder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        ></iframe>
+                      ) : (
+                        <>
+                          <img
+                            src={`https://img.youtube.com/vi/${video.youtubeId}/mqdefault.jpg`}
+                            alt={video.title}
+                            className={styles.DigitalGoldDashboardThumbImage}
+                          />
+                          <div
+                            className={styles.DigitalGoldDashboardPlayOverlay}
+                            onClick={() => setActiveVideoId(video.id)}
+                          >
+                            <div className={styles.DigitalGoldDashboardPlayCircle}>
+                              <Play size={14} fill="white" color="white" />
+                            </div>
+                          </div>
+                          <span className={styles.DigitalGoldDashboardDuration}>{video.duration}</span>
+                        </>
+                      )}
                     </div>
+
                     <div className={styles.DigitalGoldDashboardVideoContent}>
-                      <p className={styles.DigitalGoldDashboardVideoTitle}>How investing in Digital Gold helps you grow wealth?</p>
+                      <p className={styles.DigitalGoldDashboardVideoTitle}>{video.title}</p>
                       <div className={styles.DigitalGoldDashboardAuthor}>
                         <div className={styles.DigitalGoldDashboardAvatar}>F</div>
-                        <span>Finhaat</span>
+                        <span>MakeWealth</span>
+                        {activeVideoId === video.id && (
+                          <span
+                            className={styles.DigitalGoldDashboardStopVideo}
+                            onClick={() => setActiveVideoId(null)}
+                          >
+                            Stop Video
+                          </span>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -285,7 +355,7 @@ const DigitalGold = () => {
 
             <div className={styles.DigitalGoldDashboardOrderList}>
               {ordersLoading ? (
-                 <DesktopOrderSkeleton count={10} />
+                <DesktopOrderSkeleton count={10} />
               ) : orders.length === 0 ? (
                 <div className={styles.DigitalGoldDashboardEmptyState}>
                   No orders found

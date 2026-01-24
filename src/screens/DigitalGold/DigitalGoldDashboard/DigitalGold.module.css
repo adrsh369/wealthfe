@@ -390,6 +390,7 @@
   inset: 0;
   background: linear-gradient(45deg, #1e3a8a, #3b82f6);
   opacity: 0.8;
+  width: 100%;
 }
 
 .DigitalGoldDashboardPlayOverlay {
@@ -526,4 +527,87 @@
   .DigitalGoldDashboardVideoGrid {
     grid-template-columns: 1fr;
   }
+}
+
+.DigitalGoldDashboardEmptyState {
+  flex: 1; 
+  display: flex;
+  align-items: center; 
+  justify-content: center;
+  font-size: 14px;
+  color: #94a3b8;
+  font-weight: 500;
+  text-align: center;
+}
+
+.DigitalGoldDashboardErrorContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.DigitalGoldDashboardErrorText {
+  font-size: 13px;
+  color: #e53e3e;
+  margin: 0;
+  font-weight: 500;
+}
+
+.DigitalGoldDashboardRetryBtn {
+  background: none;
+  border: none;
+  color: #1565c0;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+  width: fit-content;
+}
+
+.DigitalGoldDashboardRetryBtn:hover {
+  color: #0d47a1;
+}
+
+/* -----------------For Blogs and Videos--------- */
+
+.DigitalGoldDashboardVideoThumb {
+  height: 150px; 
+  background: #000;
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px 12px 0 0;
+}
+
+.DigitalGoldDashboardInlinePlayer {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.DigitalGoldDashboardPlayOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.2);
+  transition: background 0.3s ease;
+}
+
+.DigitalGoldDashboardPlayOverlay:hover {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.DigitalGoldDashboardStopVideo {
+  margin-left: auto;
+  color: #e53e3e;
+  font-size: 10px;
+  text-transform: uppercase;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
 }
