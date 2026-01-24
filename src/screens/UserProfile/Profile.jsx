@@ -5,8 +5,10 @@ import backIcon from '../../assets/images/backIcon.svg';
 import Navbar from '../../components/Navbar/Navbar';
 import { selectProfileLoaded, selectUserEmail, selectUserName, selectUserMobileNo } from "../../store/auth/auth.selectors";
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
+    const navigate = useNavigate();
      const userName = useSelector(selectUserName)
      const userEmail = useSelector(selectUserEmail)
      const userMobileNo= useSelector(selectUserMobileNo)
@@ -38,7 +40,7 @@ const Profile = () => {
                 <header className={styles.profileNavbar}>
                     <div className={styles.profileNavContent}>
                         <div className={styles.profileHeaderLeft}>
-                            <img src={backIcon} alt="Back" className={styles.profileBackBtn} />
+                            <img src={backIcon} alt="Back" className={styles.profileBackBtn} onClick={() => navigate('/dashboard')}/>
                             <h1 className={styles.profileNavTitle}>My Profile</h1>
                         </div>
                         {userData.profileStatus === 0 && !isEditing && (
