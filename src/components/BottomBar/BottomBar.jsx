@@ -34,7 +34,7 @@ const BottomBar = () => {
       );
     }
 
-    return navItems.filter(item => ['dashboard', 'portfolio'].includes(item.id));
+    return navItems.filter(item => ['dashboard', 'digitalGold'].includes(item.id));
   };
 
   const visibleItems = getVisibleItems();

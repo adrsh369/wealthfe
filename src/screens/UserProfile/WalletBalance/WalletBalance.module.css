@@ -192,7 +192,7 @@
 .WalletBalanceBankName {
     font-size: 13px;
     font-weight: 700;
-    color: #1e293b;
+    color: #092042;
     margin: 0;
 }
 
@@ -305,10 +305,116 @@
 
 .WalletBalanceHistoryItem {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 0;
+    flex-direction: column;
+    /* gap: 8px; */
+    padding: 14px 0;
     border-bottom: 1px solid #f1f5f9;
+    width: 100%;
+}
+
+.WalletBalanceTypeWrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.NoTransactionText {
+    margin: auto;
+    text-align: center;
+    font-size: 13px;
+    color: #a8a8a8;
+}
+
+
+
+.WalletBalanceHistoryAmount {
+    font-size: 14px;
+    font-weight: 700;
+    text-align: right;
+}
+
+.WalletBalanceCREDITAmount {
+    color: #16a34a;
+}
+
+.WalletBalanceDEBITAmount {
+    color: #092042;
+}
+
+.WalletBalanceStatusBadge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+
+.statusSUCCESS {
+    background-color: #f0fdf4;
+    color: #16a34a;
+}
+
+
+.statusPENDING {
+    background-color: #fffbeb;
+    color: #d97706;
+}
+
+
+.statusFAILED {
+    background-color: #fef2f2;
+    color: #dc2626;
+}
+
+
+.WalletBalanceHistoryDateTime {
+    font-size: 11px;
+    color: #94a3b8;
+    margin: 0;
+}
+
+.WalletBalanceStatusBadge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+
+.WalletBalanceFlowIcon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.WalletBalanceCREDIT {
+    background-color: #f0fdf4;
+    color: #16a34a;
+}
+
+.WalletBalanceDEBIT {
+    background-color: #fef2f2;
+    color: #dc2626;
+}
+
+.WalletBalanceTransactionType {
+    font-size: 13px;
+    font-weight: 600;
+    color: #092042;
+}
+
+.WalletBalanceHistoryRow {
+    display: flex;
+    justify-content: space-between;
+
+    align-items: center;
+    width: 100%;
 }
 
 .WalletBalanceHistoryLeft {
@@ -336,8 +442,8 @@
 }
 
 .WalletBalanceHistoryAmount {
-    font-size: 14px;
-    font-weight: 700;
+    font-size: 13px;
+    font-weight: 600;
     color: #092042;
     margin: 0;
 }
@@ -346,6 +452,7 @@
     font-size: 11px;
     color: #94a3b8;
     margin: 0;
+    margin-left: 38px;
 }
 
 .WalletBalanceStatusBadge {
@@ -426,7 +533,7 @@
 .WalletBalanceCurrencyPrefix {
     font-size: 22px;
     font-weight: 700;
-    color: #1e293b;
+    color: #092042;
 }
 
 .WalletBalancePremiumAmountInput {

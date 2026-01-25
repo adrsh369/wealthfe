@@ -4,6 +4,11 @@ export const API_ROUTES = {
   USER_Register: "/api/auth/register",
   USER_PROFILE: "/api/users/getprofile",
 
+  WALLET_BALANCE_WITH_BANK: "/api/wallet/wallet-balance",
+  WALLET_HISTORY: '/api/wallet/wallet-history',
+  WALLET_ADD_BANK: '/api/wallet/add-bank',
+  WALLET_WITHDRAW_BALANCE: '/api/wallet/withdraw-wallet-balance',
+
   GOLD_INVESTED_SUMMARY: "/api/gold/invested-summary",
   GOLD_ORDER_DETAILS: "/api/gold/orders",
 

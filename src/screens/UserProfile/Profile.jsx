@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 import styles from './Profile.module.css';
 import backIcon from '../../assets/images/backIcon.svg';
@@ -7,7 +7,11 @@ import { selectProfileLoaded, selectUserEmail, selectUserName, selectUserMobileN
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Wallet } from 'lucide-react';
-import SellWalletBalanceGold from './WalletBalance/WalletBalance';
+import WalletBalance from './WalletBalance/WalletBalance';
+import LoadingDots from '../../components/LoadingDots/LoadingDots';
+import { fetchUserProfile } from '../../services/apis/profile.service';
+import toast from 'react-hot-toast';
+import { formatINR } from '../../utils/currency';
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -15,6 +19,11 @@ const Profile = () => {
     const userEmail = useSelector(selectUserEmail)
     const userMobileNo = useSelector(selectUserMobileNo)
     const [isEditing, setIsEditing] = useState(false);
+
+    const [profileData, setProfileData] = useState(null);
+    const [isFetchingProfile, setIsFetchingProfile] = useState(false);
+
+
 
     const [showWalletBalanceModal, setShowWalletBalanceModal] = useState(false);
 
@@ -24,6 +33,27 @@ const Profile = () => {
         email: "adars@gmail.com",
         profileStatus: 0
     };
+
+    useEffect(() => {
+        const getProfile = async () => {
+            setIsFetchingProfile(true);
+            try {
+                const res = await fetchUserProfile();
+                if (res.status === 1) {
+                    setProfileData(res);
+                } else {
+                    toast.error("Please try again")
+                }
+            } catch (e) {
+                toast.error("Please try again")
+            }
+            finally {
+                setIsFetchingProfile(false);
+            }
+        };
+        getProfile();
+    }, []);
+
 
     const customSelectStyles = {
         control: (base, state) => ({
@@ -72,10 +102,10 @@ const Profile = () => {
 
                                 <button
                                     className={styles.smallWalletBtn}
-                                     onClick={() => setShowWalletBalanceModal(true)}
+                                    onClick={() => setShowWalletBalanceModal(true)}
                                 >
                                     <Wallet size={14} strokeWidth={2.5} className={styles.walletIcon} />
-                                    <span className={styles.btnText}>Wallet: $1,240.50</span>
+                                    <span className={styles.btnText}> {isFetchingProfile ? <LoadingDots /> : `Wallet: ${formatINR(profileData?.walletBalance)}`}</span>
                                 </button>
                             </div>
 
@@ -150,13 +180,12 @@ const Profile = () => {
                 </main>
             </div>
 
-            <SellWalletBalanceGold
+            <WalletBalance
                 isOpen={showWalletBalanceModal}
                 onClose={() => {
                     setShowWalletBalanceModal(false);
                 }}
                 title="Sell Gold"
-                // setStatusModal={setStatusModal}
             />
 
         </>

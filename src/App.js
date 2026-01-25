@@ -20,6 +20,10 @@ const App = () => {
         toastOptions={{
           duration: 3000
         }}
+        containerStyle={{
+          zIndex: 99999999
+        }}
+
       />
       <Routes>
 
