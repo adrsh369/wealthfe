@@ -6,13 +6,17 @@ import Navbar from '../../components/Navbar/Navbar';
 import { selectProfileLoaded, selectUserEmail, selectUserName, selectUserMobileNo } from "../../store/auth/auth.selectors";
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { Wallet } from 'lucide-react';
+import SellWalletBalanceGold from './WalletBalance/WalletBalance';
 
 const Profile = () => {
     const navigate = useNavigate();
-     const userName = useSelector(selectUserName)
-     const userEmail = useSelector(selectUserEmail)
-     const userMobileNo= useSelector(selectUserMobileNo)
+    const userName = useSelector(selectUserName)
+    const userEmail = useSelector(selectUserEmail)
+    const userMobileNo = useSelector(selectUserMobileNo)
     const [isEditing, setIsEditing] = useState(false);
+
+    const [showWalletBalanceModal, setShowWalletBalanceModal] = useState(false);
 
     const userData = {
         name: "Adarsh Pandey",
@@ -40,7 +44,7 @@ const Profile = () => {
                 <header className={styles.profileNavbar}>
                     <div className={styles.profileNavContent}>
                         <div className={styles.profileHeaderLeft}>
-                            <img src={backIcon} alt="Back" className={styles.profileBackBtn} onClick={() => navigate('/dashboard')}/>
+                            <img src={backIcon} alt="Back" className={styles.profileBackBtn} onClick={() => navigate('/dashboard')} />
                             <h1 className={styles.profileNavTitle}>My Profile</h1>
                         </div>
                         {userData.profileStatus === 0 && !isEditing && (
@@ -65,6 +69,14 @@ const Profile = () => {
                                 {/* <button className={styles.profileEditActionBtn} onClick={() => setIsEditing(true)}>
                                     Complete Profile
                                 </button> */}
+
+                                <button
+                                    className={styles.smallWalletBtn}
+                                     onClick={() => setShowWalletBalanceModal(true)}
+                                >
+                                    <Wallet size={14} strokeWidth={2.5} className={styles.walletIcon} />
+                                    <span className={styles.btnText}>Wallet: $1,240.50</span>
+                                </button>
                             </div>
 
                             <div className={styles.profileDetailsSection}>
@@ -137,6 +149,15 @@ const Profile = () => {
                     )}
                 </main>
             </div>
+
+            <SellWalletBalanceGold
+                isOpen={showWalletBalanceModal}
+                onClose={() => {
+                    setShowWalletBalanceModal(false);
+                }}
+                title="Sell Gold"
+                // setStatusModal={setStatusModal}
+            />
 
         </>
     );
