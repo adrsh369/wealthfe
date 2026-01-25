@@ -319,3 +319,29 @@
     gap: 12px;
   }
 }
+
+
+.mobileHeaderLogo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+  /* margin-top: -60px; */
+}
+
+.mobileLogo{
+  width: 150px;
+}
+
+.trustText {
+  text-align: center;
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 16px;
+}
+
+
+@media (min-width: 769px){
+  .mobileLogo{
+    width: 180px;
+  }
+}
